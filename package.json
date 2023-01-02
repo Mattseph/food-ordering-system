@@ -1,0 +1,16 @@
+{
+  "name": "foodsystem",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "sass": "sass --no-source-map --watch sass/:css/"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.1",
+    "sass": "^1.55.0"
+  }
+}
