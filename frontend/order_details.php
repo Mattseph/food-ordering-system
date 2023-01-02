@@ -242,7 +242,6 @@ if ($res3) {
                         }
                     }
                 } else {
-                    $_SESSION['signin-required'] = "<div id='message' class='fail order-message'><img src='../images/logo/warning.svg' alt='warning' class='warning'><span>Sigin Required</span</div>";
                     header('location:' . SITEURL . 'frontend/signin.php');
                 }
                 ob_end_flush();
