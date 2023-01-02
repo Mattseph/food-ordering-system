@@ -1,0 +1,494 @@
+@font-face {
+    font-family: 'myFont';
+    src: url('../fonts/Poppins-Regular.otf') format('otf');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: "myFont";
+    src: url("../font/Sansation-Regular-webfont.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "myFont";
+    src: url("../font/Sansation-Bold-webfont.woff") format("woff");
+    font-weight: bold;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "myFont";
+    src: url("../font/Sansation-Italic-webfont.woff") format("woff");
+    font-weight: normal;
+    font-style: italic;
+  }
+  @font-face {
+    font-family: "myFont";
+    src: url("../font/Sansation-BoldItalic-webfont.woff") format("woff");
+    font-weight: bold;
+    font-style: italic;
+  }
+  
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'myFont', sans-serif;
+}
+
+
+.success {
+    width: 100%;
+    height: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    color: rgb(255, 255, 255);
+    background: rgb(0, 255, 0);
+    text-align: center;
+    line-height: 2;
+    font-weight: 700;
+}
+
+.fail {
+    width: 100%;
+    height: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    color: rgb(255, 255, 255);
+    background: rgb(255, 0, 0);
+    text-align: center;
+    line-height: 2;     
+    font-weight: 700;
+}
+
+
+.signin-message, .admin-message, .category-message, .delivery-message, .food-message, .order-message, .supplier-message {
+    position: absolute;
+    top: 0;
+    z-index: 5;
+}
+
+img.warning {
+    width: 25px;
+    height: 25px;
+}
+
+img.successful {
+    width: 25px;
+    height: 25px;
+}
+
+a {
+
+    text-decoration: none;
+    color: #058d8a;
+    display: block;
+
+}
+
+a:hover {
+    color: white;
+}
+
+
+
+/* CSS for navbar section */
+nav {
+    width: 100%;
+    height: 70px;
+    position: -webkit-stiky;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: black;
+}
+
+.navigation {
+    width: 100%;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+div.logo {
+    width: 25%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    cursor: text;
+}
+
+div.logo img {
+    height: 70px;
+    padding: 5px;
+}
+
+ul {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 70px;
+    list-style-type: none;
+}
+
+
+ul a {
+    position: relative;
+    padding: 10px 10px;
+    margin: 0 10px;
+    display: block;
+    font-weight: bold;
+    font-size: 1.1rem;
+    text-align: center;
+    color: #05dbd7;    
+    overflow: hidden;
+    z-index: 1;
+    transform: all 0.5s ease;
+}
+
+ul.nav-bar a:hover {
+    top: -5px;
+    color: #05dbd7;
+    background: white;
+    border-radius: 5px;
+    box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+    
+}
+
+/*End of Nav bar*/
+
+/*Form*/
+h2 {
+    margin-bottom: 30px;
+    text-align: center;
+    color: rgb(5,141,138);   
+}
+
+div.img-container img {  
+    width: 40px;
+    height: 40px;
+    margin: 0 10px;
+}
+
+div.form {
+    width: 100%;
+    height: calc(100vh - 70px);
+    position: relative;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: 10px;
+    padding: 20px;
+}
+
+div.row {
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    color: black;
+    border-radius: 20px; 
+    background: #e0e0e0;
+    box-shadow: 15px 15px 30px #bebebe, -15px -15px 30px #ffffff;
+}
+
+div.form-background{
+    width: 55%;
+    height: 100%;
+    position: relative;
+    z-index: -1;
+
+}
+
+div.form-background img {
+    width: 100%;
+    height: 100%;
+
+}
+
+.crud {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    padding: 30px;
+}
+
+div.form-group {
+    width: 100%;
+    font-size: 1rem;
+}
+
+.form-group .current-image {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    color: rgb(5,141,138);
+    font-weight: 700;
+}
+
+.placeholder {
+    width: 100%;
+    position: relative;
+}
+
+.placeholder > label {
+    position: absolute;
+    top: 17px;
+    left: 13px;
+    color: rgba(0, 0, 0, 0.6);
+    pointer-events: none;
+    font-weight: 500;
+    transition: all 0.2s linear;
+}
+
+.placeholder input[type]:valid ~ label,
+.placeholder input[type]:read-only ~ label,
+.placeholder input[type]:focus ~ label,
+.placeholder textarea:valid ~ label,
+.placeholder textarea:focus ~ label,
+.placeholder select:valid ~ label,
+.placeholder select:focus ~ label {
+    color: rgb(5,141,138);
+    transform: translateY(-13px);
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+input[type], select {
+    width: 100%;
+    height: 55px;
+    border-radius: 15px;
+    padding: 8px 12px 0;
+    font-size: 1rem;
+    border: none;
+
+}
+.description {
+    width: 100%;
+}
+.description textarea {
+    width: 100%;
+    height: 100px;
+    border-radius: 15px;
+    padding: 20px 12px;
+    font-size: 1rem;
+}
+
+input[type]:focus, textarea:focus {
+    outline: none;
+    border: none;
+}
+
+.active {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+
+
+.file label,
+.active label {
+    color: rgb(5,141,138);
+    font-weight: 700;
+    font-size: 1rem;
+}
+  
+.active div {
+    width: 25%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+input[type="radio"] {
+    width: 30px; 
+    height: 30px;
+    accent-color: rgb(5,141,138);
+}
+
+textarea {
+    resize: none;
+    height: 100px;
+    overflow: auto; 
+    border: none;
+}
+
+.form-button {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+
+}
+button {
+    width: 100px;
+    margin-top: 20px;
+    margin-bottom: 5px;
+    color: #058d8a;
+    z-index: 1;
+    background: #e8e8e8;
+    position: relative;
+    -webkit-box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
+    box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
+    transition: all 250ms;
+    overflow: hidden;
+}
+   
+button::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0;
+    background-color: #058d8a;
+    z-index: -1;
+    -webkit-box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
+    box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
+    transition: all 0.1s ease-in;
+}
+   
+button:hover { 
+    color: #e8e8e8;
+}
+   
+button:hover::before {
+    width: 100%;
+}
+/*End of Login*/
+
+/*Content*/
+.main-content {
+    width: 100%;
+    position: relative;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+    overflow-x: hidden;
+    overflow-y: auto;
+
+}
+
+.wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;  
+    gap: 30px;
+    margin-top: 30px;
+}
+
+.view-container {
+    display: flex; 
+    gap: 20px;
+}
+
+h1 {
+    color: rgb(5,219,215);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+td {
+    font-size: 1.1rem;
+}
+
+th {
+    font-size: 1.2rem;
+}
+
+th.no-border, td.no-border{
+    border: none;
+}
+
+td, th{
+    text-align: center;
+    vertical-align: middle;
+    padding: 10px;
+    border: 3px solid #058d8a;
+
+}
+
+td:nth-child(1), th:nth-child(1) {  
+    background-color: #058d8a;
+    color: white;
+
+}
+
+/*Buttons*/
+
+.btn {
+    display: inline-block;
+    text-align: center;
+    padding: 12px 16px;
+    border: none;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: scale 0.1s ease-in; 
+}
+
+
+.btn-first {
+    background-color: rgb(5,141,138);
+    color: white;
+}
+
+.btn-first:hover {
+    background-color: rgb(34, 166, 179);
+    scale: 1.05;
+}
+
+.btn-second {
+    width: 100px;
+    background-color: rgb(0, 255, 0);
+    color: white;
+}
+
+.btn-second:hover {
+    background-color: rgb(0, 255, 0, 0.5);
+    scale: 1.05;
+}
+
+
+.btn-third {
+    width: 100px;
+    background-color: rgb(255, 0, 0);
+    color: white;
+    
+}
+
+.btn-third:hover {
+    background-color: rgb(235, 77, 75);
+    scale: 1.05;
+}
+
+
+
