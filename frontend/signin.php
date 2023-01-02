@@ -35,12 +35,6 @@ if (isset($_SESSION['signin-contact'])) //Checking whether the session is set or
 	unset($_SESSION['signin-contact']);
 }
 
-if (isset($_SESSION['signin-required'])) //Checking whether the session is set or not
-{	//DIsplaying session message
-	echo $_SESSION['signin-required'];
-	//Removing session message
-	unset($_SESSION['signin-required']);
-}
 
 $input = [];
 $error = [];
