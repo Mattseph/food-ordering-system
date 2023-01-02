@@ -153,47 +153,47 @@ if ($res3) {
                 </div>
 
                 <?php
+                if (isset($_SESSION['user_id'])) {
+                    if (filter_has_var(INPUT_POST, 'submit')) {
+                        $order_id = validate_string($_POST['order_id']);
+                        $customer_lastname = validate_string(ucwords($_POST['lastname']));
+                        $customer_firstname = validate_string(ucwords($_POST['firstname']));
 
-                if (filter_has_var(INPUT_POST, 'submit')) {
-                    $order_id = validate_string($_POST['order_id']);
-                    $customer_lastname = validate_string(ucwords($_POST['lastname']));
-                    $customer_firstname = validate_string(ucwords($_POST['firstname']));
+                        $sanitize_number = sanitize_int($_POST['contactnumber']);
+                        $contact_number = validate_int($sanitize_number);
 
-                    $sanitize_number = sanitize_int($_POST['contactnumber']);
-                    $contact_number = validate_int($sanitize_number);
+                        $address = validate_string(ucwords($_POST['address']));
 
-                    $address = validate_string(ucwords($_POST['address']));
+                        $sanitize_postal = sanitize_int($_POST['postalcode']);
+                        $postal_code = validate_int($sanitize_postal);
 
-                    $sanitize_postal = sanitize_int($_POST['postalcode']);
-                    $postal_code = validate_int($sanitize_postal);
+                        $clean_rider_id = sanitize_int($_POST['rider_id']);
+                        $rider_id = validate_int($clean_rider_id);
 
-                    $clean_rider_id = sanitize_int($_POST['rider_id']);
-                    $rider_id = validate_int($clean_rider_id);
+                        $sanitize_foodid = sanitize_int($_POST['food_id']);
+                        $food_id = validate_int($sanitize_foodid);
 
-                    $sanitize_foodid = sanitize_int($_POST['food_id']);
-                    $food_id = validate_int($sanitize_foodid);
+                        $food_price = validate_string($_POST['foodprice']);
+                        $quantity = validate_string($_POST['quantity']);
 
-                    $food_price = validate_string($_POST['foodprice']);
-                    $quantity = validate_string($_POST['quantity']);
+                        $total = validate_string($food_price * $quantity);
 
-                    $total = validate_string($food_price * $quantity);
+                        $mode_of_payment = validate_string('Cash on Delivery');
 
-                    $mode_of_payment = validate_string('Cash on Delivery');
+                        $order_date = date("Y-m-d h:i:s");
 
-                    $order_date = date("Y-m-d h:i:s");
+                        // Set the current time
+                        $current_time = time();
 
-                    // Set the current time
-                    $current_time = time();
+                        // Set the expected time of delivery
+                        $expected_time = $current_time + (60 * 30); // Add one hour to the current time
 
-                    // Set the expected time of delivery
-                    $expected_time = $current_time + (60 * 30); // Add one hour to the current time
+                        // Print the expected time of delivery
+                        $expected_delivery = date("Y-m-d h:i:s", $expected_time);
 
-                    // Print the expected time of delivery
-                    $expected_delivery = date("Y-m-d h:i:s", $expected_time);
+                        $status = validate_string("Ordered");
 
-                    $status = validate_string("Ordered");
-
-                    $sql2 = "INSERT INTO order_details
+                        $sql2 = "INSERT INTO order_details
                         (
                             order_id, 
                             customer_lastname,
@@ -228,18 +228,22 @@ if ($res3) {
                             '$status'
                         )";
 
-                    $res2 = mysqli_query($conn, $sql2);
+                        $res2 = mysqli_query($conn, $sql2);
 
-                    if ($res2) {
-                        $_SESSION['order'] = "<div id='message' class='success order-message'><img src='../images/logo/successful.svg' alt='successful' class='successful'><span>Food Ordered Successfully</span></div>";
+                        if ($res2) {
+                            $_SESSION['order'] = "<div id='message' class='success order-message'><img src='../images/logo/successful.svg' alt='successful' class='successful'><span>Food Ordered Successfully</span></div>";
 
-                        $_SESSION['food_id'] = $food_id;
+                            $_SESSION['food_id'] = $food_id;
 
-                        header('location:' . SITEURL . 'frontend/order_summary.php');
-                    } else {
-                        $_SESSION['order'] = "<div id='message' class='fail order-message'><img src='../images/logo/warning.svg' alt='warning' class='warning'><span>Order Failed</span</div>";
-                        header('location:' . SITEURL . 'frontend/order_details.php');
+                            header('location:' . SITEURL . 'frontend/order_summary.php');
+                        } else {
+                            $_SESSION['order'] = "<div id='message' class='fail order-message'><img src='../images/logo/warning.svg' alt='warning' class='warning'><span>Order Failed</span</div>";
+                            header('location:' . SITEURL . 'frontend/order_details.php');
+                        }
                     }
+                } else {
+                    $_SESSION['signin-required'] = "<div id='message' class='fail order-message'><img src='../images/logo/warning.svg' alt='warning' class='warning'><span>Sigin Required</span</div>";
+                    header('location:' . SITEURL . 'frontend/signin.php');
                 }
                 ob_end_flush();
                 ?>

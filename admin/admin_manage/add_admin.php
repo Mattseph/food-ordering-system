@@ -101,7 +101,7 @@ if (filter_has_var(INPUT_POST, 'submit')) {
 			header("location:" . SITEURL .	'admin/admin_manage/add_admin.php');
 		}
 	} else {
-		$_SESSION['add'] = "<div id='message' class='fail admin-message'><img src='../../images/logo/warning.svg' alt='warning' class='warning'><span>Password didn't match</span></div>";
+		$_SESSION['add'] = "<div id='message' class='fail admin-message'><img src='../../images/logo/warning.svg' alt='warning' class='warning'><span>Password did not match</span></div>";
 
 		//Redirecting page to add admin
 		header("location:" . SITEURL . 'admin/admin_manage/add_admin.php');
