@@ -46,14 +46,14 @@ include '../partials/head.php';
 			<h2>Update Supplier Profile</h2>
 			<div class="form-group">
 				<div class="placeholder">
-					<input type="text" name="lastname" id="lastname" pattern="[A-Za-z]+" value="<?php echo $supplier_lastname; ?>" required autofocus>
+					<input type="text" name="lastname" id="lastname" pattern="[A-Za-z ]+" value="<?php echo $supplier_lastname; ?>" required autofocus>
 					<label for="lastname">Lastname</label>
 				</div>
 			</div>
 
 			<div class="form-group">
 				<div class="placeholder">
-					<input type="text" name="firstname" id="firstname" pattern="[A-Za-z]+" value="<?php echo $supplier_firstname; ?>" required>
+					<input type="text" name="firstname" id="firstname" pattern="[A-Za-z ]+" value="<?php echo $supplier_firstname; ?>" required>
 					<label for="firstname">Firstname</label>
 				</div>
 			</div>
@@ -81,14 +81,14 @@ include '../partials/head.php';
 
 			<div class="form-group">
 				<div class="placeholder">
-					<input type="text" name="postalcode" id="postalcode" pattern="[A-Za-z0-9,-+_]+" value="<?php echo $postal_code; ?>" required>
+					<input type="text" name="postalcode" id="postalcode" pattern="[0-9]+" value="<?php echo $postal_code; ?>" required>
 					<label for="postalcode">Postal Code</label>
 				</div>
 			</div>
 
 			<div class="form-group">
 				<div class="placeholder">
-					<input type="text" name="country" id="country" pattern="[A-Za-z0-9,.-@_.-]+" value="<?php echo $country; ?>" required>
+					<input type="text" name="country" id="country" pattern="[A-Za-z- ]+" value="<?php echo $country; ?>" required>
 					<label for="country">Country</label>
 				</div>
 			</div>

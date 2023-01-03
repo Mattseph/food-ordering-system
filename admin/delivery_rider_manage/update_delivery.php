@@ -52,14 +52,14 @@
             <h2>Update Rider Profile</h2>
             <div class="form-group">
                 <div class="placeholder">
-                    <input type="text" name="lastname" id="lastname" value="<?php echo $rider_lastname; ?>" pattern="[A-Za-z]+" required autofocus>
+                    <input type="text" name="lastname" id="lastname" value="<?php echo $rider_lastname; ?>" pattern="[A-Za-z ]+" required autofocus>
                     <label for="lastname">Last Name</label>
                 </div>
             </div>
 
             <div class="form-group">
                 <div class="placeholder">
-                    <input type="text" name="firstname" id="firstname" value="<?php echo $rider_firstname; ?>" pattern="[A-Za-z]+" required>
+                    <input type="text" name="firstname" id="firstname" value="<?php echo $rider_firstname; ?>" pattern="[A-Za-z ]+" required>
                     <label for="firstname">Firstame</label>
                 </div>
             </div>

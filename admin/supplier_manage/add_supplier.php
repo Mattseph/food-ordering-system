@@ -16,14 +16,14 @@ include '../partials/head.php';
             <h2>Add Supplier Profile</h2>
             <div class="form-group">
                 <div class="placeholder">
-                    <input type="text" name="lastname" id="lastname" pattern="[A-Za-z]+" required autofocus>
+                    <input type="text" name="lastname" id="lastname" pattern="[A-Za-z ]+" required autofocus>
                     <label for="lastname">Lastname</label>
                 </div>
             </div>
 
             <div class="form-group">
                 <div class="placeholder">
-                    <input type="text" name="firstname" id="firstname" pattern="[A-Za-z]+" required>
+                    <input type="text" name="firstname" id="firstname" pattern="[A-Za-z ]+" required>
                     <label for="firstname">Firtname</label>
                 </div>
             </div>
@@ -51,14 +51,14 @@ include '../partials/head.php';
 
             <div class="form-group">
                 <div class="placeholder">
-                    <input type="text" name="postalcode" id="postalcode" pattern="[A-Za-z0-9,-+_]+" required>
+                    <input type="text" name="postalcode" id="postalcode" pattern="[0-9]+" required>
                     <label for="postalcode">Postal Code</label>
                 </div>
             </div>
 
             <div class="form-group">
                 <div class="placeholder">
-                    <input type="text" name="country" id="country" pattern="[A-Za-z0-9,.-@_.-]+" required>
+                    <input type="text" name="country" id="country" pattern="[A-Za-z- ]+" required>
                     <label for="country">Country</label>
                 </div>
             </div>

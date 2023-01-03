@@ -1,4 +1,4 @@
-<?php include('front-partials/header.php'); ?>
+<?php include 'front-partials/header.php'; ?>
 
 <?php
 if (isset($_GET['category_id'])) {

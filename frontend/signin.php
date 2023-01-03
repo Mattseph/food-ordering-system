@@ -1,5 +1,5 @@
 <?php
-include('../configuration/constants.php');
+include('../configuration.php');
 ?>
 
 <html>
@@ -11,9 +11,9 @@ include('../configuration/constants.php');
 	<script src="../js/timer.js" type="text/javascript"></script>
 </head>
 <?php
-if (isset($_SESSION['login'])) {
-	echo $_SESSION['login'];
-	unset($_SESSION['login']);
+if (isset($_SESSION['incorrect-input'])) {
+	echo $_SESSION['incorrect-input'];
+	unset($_SESSION['incorrect-input']);
 }
 
 if (isset($_SESSION['error_login'])) {
@@ -26,13 +26,6 @@ if (isset($_SESSION['add'])) //Checking whether the session is set or not
 	echo $_SESSION['add'];
 	//Removing session message
 	unset($_SESSION['add']);
-}
-
-if (isset($_SESSION['signin-contact'])) //Checking whether the session is set or not
-{	//DIsplaying session message
-	echo $_SESSION['signin-contact'];
-	//Removing session message
-	unset($_SESSION['signin-contact']);
 }
 
 
@@ -58,7 +51,7 @@ $error = [];
 							<img src="../images/signin/username.png" alt="profile">
 						</div>
 						<div class="placeholder">
-							<input type="text" name="username" id="username" title="Please enter correct username" pattern="[A-Za-z0-9.+_-@ -]{5,}" value="<?php echo $input['username'] ?? '' ?>" required autofocus>
+							<input type="text" name="username" id="username" title="Please enter correct username" pattern="[A-Za-z0-9!@#$%^&*()_+=-?/ ]{5,}" value="<?php echo $input['username'] ?? '' ?>" required autofocus>
 							<label for="username">Username</label>
 							<small style="color: red"><?php echo $error['username'] ?? '' ?></small>
 						</div>
@@ -69,7 +62,7 @@ $error = [];
 							<img src="../images/signin/password.png" alt="lock">
 						</div>
 						<div class="placeholder">
-							<input type="password" name="password" id="password" title="Please enter correct password" pattern="[A-Za-z0-9.-+_()*]{8,}" value="<?php echo $input['password'] ?? '' ?>" required>
+							<input type="password" name="password" id="password" title="Please enter correct password" pattern="[A-Za-z0-9!@#$%^&*()_+=-?/ ]{8,}" value="<?php echo $input['password'] ?? '' ?>" required>
 							<label for="password">Password</label>
 							<small style="color: red"><?php echo $error['password'] ?? ''; ?></small>
 						</div>
@@ -124,13 +117,13 @@ if ($user && $pass) {
 	} elseif ($count2 === 1) {
 		$row2 = mysqli_fetch_assoc($res2);
 
-		$_SESSION['user'] = "<div id='message' class='success signin-message'><img src='../images/logo/successful.svg' alt='successful' class='successful'><span>Welcome User {$username}!</span></div>";
+		$_SESSION['user'] = "<div id='message' class='success signin-message'><img src='images/logo/successful.svg' alt='successful' class='successful'><span>Welcome User {$username}!</span></div>";
 
 		$_SESSION['user_id'] = $row2['user_id'];
 
-		header('location:' . SITEURL . 'frontend/index.php');
+		header('location:' . SITEURL);
 	} else {
-		$_SESSION['login'] = "<div id='message' class='fail signin-message'><img src='../images/logo/warning.svg'alt='warning' class='warning'><span>Sign in failed, please input correct username and password</span></div>";
+		$_SESSION['incorrect-input'] = "<div id='message' class='fail signin-message'><img src='../images/logo/warning.svg' alt='warning' class='warning'><span>Sign in failed, please input correct username and password</span></div>";
 		header('location:' . SITEURL . 'frontend/signin.php');
 	}
 } else {

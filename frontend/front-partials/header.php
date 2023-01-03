@@ -1,5 +1,5 @@
 <?php
-include '../configuration/constants.php';
+include '../configuration.php';
 ?>
 
 <!DOCTYPE html>
@@ -24,7 +24,7 @@ include '../configuration/constants.php';
             <div class="middle">
                 <ul class="nav-bar">
                     <li>
-                        <a href="<?php echo SITEURL; ?>frontend/index.php">Home</a>
+                        <a href="<?php echo SITEURL; ?>">Home</a>
                     </li>
 
                     <li>

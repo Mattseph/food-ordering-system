@@ -11,8 +11,8 @@
 </head>
 
 <?php
-include '../../configuration/constants.php';
-include 'login_checker.php';
+include '../../configuration.php';
+include '../../login_checker.php';
 ?>
 
 <body>

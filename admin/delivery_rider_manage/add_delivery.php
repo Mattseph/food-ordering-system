@@ -15,14 +15,14 @@
             <h2>Add Delivery Rider</h2>
             <div class="form-group">
                 <div class="placeholder">
-                    <input type="text" name="lastname" id="lastname" pattern="[A-Za-z]+" required autofocus>
+                    <input type="text" name="lastname" id="lastname" pattern="[A-Za-z ]+" required autofocus>
                     <label for="lastname">Lastname</label>
                 </div>
             </div>
 
             <div class="form-group">
                 <div class="placeholder">
-                    <input type="text" name="firstname" id="firstname" pattern="[A-Za-z]+" required>
+                    <input type="text" name="firstname" id="firstname" pattern="[A-Za-z ]+" required>
                     <label for="firstname">Firstname</label>
                 </div>
             </div>

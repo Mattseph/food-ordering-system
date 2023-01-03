@@ -1,5 +1,5 @@
 <?php
-include '../configuration/constants.php';
+include '../configuration.php';
 unset($_SESSION['user']);
 session_destroy();
 
