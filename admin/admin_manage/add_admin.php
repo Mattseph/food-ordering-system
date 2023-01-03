@@ -15,35 +15,35 @@
 			<h2>Add Admin</h2>
 			<div class="form-group">
 				<div class="placeholder">
-					<input type="text" name="lastname" id="lastname" pattern="[A-Za-z]+" required autofocus>
+					<input type="text" name="lastname" id="lastname" pattern="[A-Za-z ]+" required autofocus>
 					<label for="lastname">Lastname</label>
 				</div>
 			</div>
 
 			<div class="form-group">
 				<div class="placeholder">
-					<input type="text" name="firstname" id="firstname" pattern="[A-Za-z]+" required>
+					<input type="text" name="firstname" id="firstname" pattern="[A-Za-z ]+" required>
 					<label for="firstname">Firstname</label>
 				</div>
 			</div>
 
 			<div class="form-group">
 				<div class="placeholder">
-					<input type="text" name="username" id="username" title="Username must be at least 5 characters" pattern="[A-Za-z0-9 -+-@._]{5,}" required>
+					<input type="text" name="username" id="username" title="Username must be at least 5 characters" pattern="[A-Za-z0-9!@#$%^&*()_+=-?/ ]{5,}" required>
 					<label for="username">Username</label>
 				</div>
 			</div>
 
 			<div class="form-group">
 				<div class="placeholder">
-					<input type="password" name="password1" id="password" title="Password must be atleast 8 characters" pattern="[A-Za-z0-9,.-@_.-]{8,}" required>
+					<input type="password" name="password1" id="password" title="Password must be atleast 8 characters" pattern="[A-Za-z0-9!@#$%^&*()_+=-?/ ]{8,}" required>
 					<label for="password">Password</label>
 				</div>
 			</div>
 
 			<div class="form-group">
 				<div class="placeholder">
-					<input type="password" name="password2" id="password2" title="Match the password above" pattern="[A-Za-z0-9,-+_]{8,}" required>
+					<input type="password" name="password2" id="password2" title="Match the password above" pattern="[A-Za-z0-9!@#$%^&*()_+=-?/ ]{8,}" required>
 					<label for="password2">Confirm Password</label>
 				</div>
 			</div>

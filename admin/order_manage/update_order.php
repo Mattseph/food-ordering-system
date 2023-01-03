@@ -126,7 +126,7 @@ include '../partials/head.php';
             $lastname = htmlspecialchars(ucwords($_POST['lastname']));
             $firstname = htmlspecialchars(ucwords($_POST['firstname']));
             $address = htmlspecialchars(ucwords($_POST['address']));
-            $status = htmlspecialchars($_POST['status']);
+            $status = htmlspecialchars(ucwords($_POST['status']));
 
             $clean_food_id = filter_var($_POST['food_id'], FILTER_SANITIZE_NUMBER_INT);
             $food_id = filter_var($clean_food_id, FILTER_VALIDATE_INT);

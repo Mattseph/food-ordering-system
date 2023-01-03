@@ -14,21 +14,21 @@
 			<h2>Change Password</h2>
 			<div class="form-group">
 				<div class="placeholder">
-					<input type="password" name="currentpassword" id="currentpassword" pattern="[A-Za-z0-9.-+_()*]{8,}" required autofocus>
+					<input type="password" name="currentpassword" id="currentpassword" pattern="[A-Za-z0-9!@#$%^&*()_+=-?/ ]{8,}" required autofocus>
 					<label for="currentpassword">Current Password</label>
 				</div>
 			</div>
 
 			<div class="form-group">
 				<div class="placeholder">
-					<input type="password" name="newpassword" id="newpassword" title="Must be at least 8 characters" pattern="[A-Za-z0-9.-+_()*]{8,}" required>
+					<input type="password" name="newpassword" id="newpassword" title="Must be at least 8 characters" pattern="[A-Za-z0-9!@#$%^&*()_+=-?/ ]{8,}" required>
 					<label for="newpassword">New Password</label>
 				</div>
 			</div>
 
 			<div class="form-group">
 				<div class="placeholder">
-					<input type="password" name="confirmpassword" id="confirmpassword" title="Must be atleast 8 characters" pattern="[A-Za-z0-9.-+_()*]{8,}" required>
+					<input type="password" name="confirmpassword" id="confirmpassword" title="Must be atleast 8 characters" pattern="[A-Za-z0-9!@#$%^&*()_+=-?/ ]{8,}" required>
 					<label for="confirmpassword">Confirm Password</label>
 				</div>
 			</div>

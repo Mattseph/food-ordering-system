@@ -1,4 +1,4 @@
-<?php include('front-partials/header.php'); ?>
+<?php include 'front-partials/header.php'; ?>
 
 <!-- Categories Section Starts Here -->
 <section class="category-wrapper">

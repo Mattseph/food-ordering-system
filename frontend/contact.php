@@ -64,16 +64,23 @@ include 'front-partials/header.php';
 
                     <section class="contact-textarea">
                         <div class="placeholder">
-                            <textarea type="textarea" name="message" id="sendmessage" pattern="[A-Za-z0-9.+_-@ !#$%?<>()&*^]+" required autofocus></textarea>
+                            <textarea type="textarea" name="message" id="sendmessage" pattern="[A-Za-z0-9.+_-@ !#$%?<>()&*^]+" <?php if (!isset($user_id)) {
+                                                                                                                                    echo "readonly";
+                                                                                                                                } else {
+                                                                                                                                    echo "required autofocus";
+                                                                                                                                } ?>><?php if (!isset($user_id)) {
+                                                                                                                                            echo "Please Sign in to Contact Us";
+                                                                                                                                        } ?></textarea>
                             <label for="sendmessage">Message</label>
                         </div>
                     </section>
 
                     <section class="contact-button">
                         <input type="hidden" name="user_id" value="<?php echo $user_id ?? ''; ?>">
-                        <button type="submit" name="submit">Send Message</button>
+                        <button type="submit" name="submit" <?php if (!isset($user_id)) {
+                                                                echo "disabled";
+                                                            } ?>>Send Message</button>
                     </section>
-
                 </div>
 
             </form>
@@ -99,6 +106,7 @@ include 'front-partials/header.php';
 
 <?php
 if (filter_has_var(INPUT_POST, 'submit')) {
+
     $id = filter_var($_POST['user_id'], FILTER_SANITIZE_NUMBER_INT);
     $user_id = filter_var($id, FILTER_VALIDATE_INT);
     $message = htmlspecialchars($_POST['message']);
@@ -120,15 +128,17 @@ if (filter_has_var(INPUT_POST, 'submit')) {
     $result = mysqli_query($conn, $sql);
 
     if ($result) {
-        $_SESSION['contact'] = "<div id='message' class='success contact-message'><img src='../images/logo/successful.svg' alt='successful' class='successful'><span>Message Sent Successfully</nspa></div>";
+        $_SESSION['contact'] = "<div id='message' class='success contact-message'><img src='images/logo/successful.svg' alt='successful' class='successful'><span>Message Sent Successfully</span></div>";
 
-        header('location:' . SITEURL . 'frontend/index.php');
+        header('location:' . SITEURL);
     } else {
-        $_SESSION['contact'] = "<div id='message' class='fail contact-message'><img src='../../images/logo/warning.svg' alt='warning' class='warning'><span>Message Sent Failed</span></div>";
+        $_SESSION['contact'] = "<div id='message' class='fail contact-message'><img src='images/logo/warning.svg' alt='warning' class='warning'><span>Message Sent Failed</span></div>";
 
-        header('location:' . SITEURL . 'frontend/index.php');
+        header('location:' . SITEURL);
     }
 }
+
+
 ob_end_flush();
 ?>
 </body>

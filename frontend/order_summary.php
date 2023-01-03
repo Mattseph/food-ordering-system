@@ -1,4 +1,4 @@
-<?php include '../configuration/constants.php'; ?>
+<?php include '../configuration.php'; ?>
 
 <!DOCTYPE html>
 <html lang="en">

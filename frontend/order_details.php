@@ -104,7 +104,7 @@ if ($res3) {
                 <h3>Delivery Details</h3>
                 <div class="order-label">
                     <div class="placeholder">
-                        <input type="text" name="lastname" id="lastname" class="input-responsive" pattern="[A-Za-z]+" required autofocus>
+                        <input type="text" name="lastname" id="lastname" class="input-responsive" pattern="[A-Za-z ]+" required autofocus>
                         <label for="lastname">Lastname</label>
                     </div>
 
@@ -112,7 +112,7 @@ if ($res3) {
 
                 <div class="order-label">
                     <div class="placeholder">
-                        <input type="text" name="firstname" id="firstame" class="input-responsive" pattern="[A-Za-z]+" required>
+                        <input type="text" name="firstname" id="firstame" class="input-responsive" pattern="[A-Za-z ]+" required>
                         <label for="firstname">Firstname</label>
                     </div>
                 </div>
@@ -159,8 +159,7 @@ if ($res3) {
                         $customer_lastname = validate_string(ucwords($_POST['lastname']));
                         $customer_firstname = validate_string(ucwords($_POST['firstname']));
 
-                        $sanitize_number = sanitize_int($_POST['contactnumber']);
-                        $contact_number = validate_int($sanitize_number);
+                        $contact_number = validate_string($_POST['contactnumber']);
 
                         $address = validate_string(ucwords($_POST['address']));
 

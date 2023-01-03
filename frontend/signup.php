@@ -1,4 +1,4 @@
-<?php include('../configuration/constants.php'); ?>
+<?php include('../configuration.php'); ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -36,19 +36,19 @@
 
                 <section class="register-input">
                     <div class="placeholder">
-                        <input type="text" id="lastname" name="lastname" class="input" pattern="[A-Za-z]+" required autofocus>
+                        <input type="text" id="lastname" name="lastname" class="input" pattern="[A-Za-z ]+" required autofocus>
                         <label for="lastname">Lastname</label>
                     </div>
 
                     <div class="placeholder">
-                        <input type="text" id="firstname" name="firstname" class="input" pattern="[A-Za-z]+" required>
+                        <input type="text" id="firstname" name="firstname" class="input" pattern="[A-Za-z ]+" required>
                         <label for="firstname">Firstname</label>
                     </div>
                 </section>
 
                 <section class="register-input">
                     <div class="placeholder">
-                        <input type="text" name="username" id="username" title="Please enter correct username" pattern="[A-Za-z0-9.+_-@ -]{5,}" required autofocus>
+                        <input type="text" name="username" id="username" title="Please enter correct username" pattern="[A-Za-z0-9!@#$%^&*()_+=-?/ ]{5,}" required autofocus>
                         <label for="username">Username</label>
                     </div>
                 </section>
@@ -69,14 +69,14 @@
 
                 <section class="register-input">
                     <div class="placeholder">
-                        <input type="password" name="password1" id="password" title="At least 8 characters" pattern="[A-Za-z0-9.-+_()*]{8,}" required>
+                        <input type="password" name="password1" id="password" title="At least 8 characters" pattern="[A-Za-z0-9!@#$%^&*()_+=-?/ ]]{8,}" required>
                         <label for="password">Password</label>
                     </div>
                 </section>
 
                 <section class="register-input">
                     <div class="placeholder">
-                        <input type="password" name="password2" id="password2" title="At least 8 characters" pattern="[A-Za-z0-9.-+_()*]{8,}" required>
+                        <input type="password" name="password2" id="password2" title="At least 8 characters" pattern="[A-Za-z0-9!@#$%^&*()_+=-?/ ]{8,}" required>
                         <label for="password2">Confirm Your Password</label>
                     </div>
                 </section>
@@ -138,8 +138,6 @@
             header('location:' . SITEURL . 'frontend/signup.php');
         }
     }
-
-
     ?>
 </body>
 
