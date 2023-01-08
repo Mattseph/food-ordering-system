@@ -28,6 +28,10 @@ if (isset($_SESSION['add'])) //Checking whether the session is set or not
 	unset($_SESSION['add']);
 }
 
+if (isset($_SESSION['signin-required'])) {
+	echo $_SESSION['signin-required'];
+	unset($_SESSION['signin-required']);
+}
 
 $input = [];
 $error = [];

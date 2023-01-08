@@ -60,7 +60,7 @@ include '../partials/head.php';
 
 			<div class="form-group">
 				<div class="placeholder">
-					<input type="tel" name="contactnumber" placeholder="contactnumber" pattern="09[0-9+]{9}" title="09XXXXXXXXX" maxLength="11" value="<?php echo $contact_number; ?>" required>
+					<input type="tel" name="contactnumber" pattern="09[0-9+]{9}" title="09XXXXXXXXX" maxLength="11" value="<?php echo $contact_number; ?>" required>
 					<label for="contactnumber">Phone Number</label>
 				</div>
 			</div>

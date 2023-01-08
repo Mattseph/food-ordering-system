@@ -18,6 +18,7 @@ if (filter_has_var(INPUT_GET, 'food_id')) {
 		$food_name = $row2['food_name'];
 		$description = $row2['description'];
 		$price = $row2['food_price'];
+		$available_quantity = $row2['available_quantity'];
 		$current_image = $row2['image_name'];
 		$active = $row2['active'];
 	}
@@ -57,6 +58,14 @@ if (filter_has_var(INPUT_GET, 'food_id')) {
 					<label for="price">Price</label>
 				</div>
 			</div>
+
+			<div class="form-group">
+				<div class="placeholder">
+					<input type="number" step="1" name="available_quantity" id="available_quantity" value="<?php echo $available_quantity; ?>">
+					<label for="available_quantity">Available Quantity</label>
+				</div>
+			</div>
+
 
 			<div class="form-group">
 				<div class="current-image">
@@ -182,6 +191,7 @@ if (filter_has_var(INPUT_GET, 'food_id')) {
 			$desc = htmlspecialchars($_POST['description']);
 
 			$food_price = htmlspecialchars($_POST['price']);
+			$available_quantity = htmlspecialchars($_POST['available_quantity']);
 
 			$current_image = htmlspecialchars($_POST['current_image']);
 			$active = htmlspecialchars($_POST['active']);
@@ -229,6 +239,7 @@ if (filter_has_var(INPUT_GET, 'food_id')) {
 				food_name = '$food_name',
 				description = '$desc',
 				food_price = '$food_price',
+				available_quantity = '$available_quantity',
 				image_name = '$image_name',
 				active = '$active'
 				WHERE food_id = $food_id

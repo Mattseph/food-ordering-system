@@ -37,6 +37,8 @@ CREATE TABLE category_list (
     active varchar(10) NOT NULL,
     PRIMARY KEY(category_id)
 );
+
+
 CREATE TABLE food_list (
 	food_id int NOT NULL AUTO_INCREMENT,
     category_id INT NOT NULL,
@@ -44,6 +46,7 @@ CREATE TABLE food_list (
     food_name varchar(100) NOT NULL,
     description varchar(255) NOT NULL,
     food_price decimal(10,2) NOT NULL,
+    available_quantity int NOT NULL,
     image_name varchar(100) NOT NULL,
     active varchar(10) NOT NULL,
     PRIMARY KEY(food_id),
@@ -63,16 +66,16 @@ CREATE TABLE delivery_rider (
 );
 
 
-CREATE TABLE order_Details (
+CREATE TABLE order_details (
 	order_id varchar(100) NOT NULL,
     customer_lastname varchar(100) NOT NULL,
     customer_firstname varchar(100) NOT NULL,
-    contact_number int(11) NOT NULL,
+    contact_number varchar(30) NOT NULL,
     delivery_address varchar(255) NOT NULL,
     postalcode varchar(50) NOT NULL,
     rider_id int NOT NULL,
     food_id int NOT NULL,
-    quantity decimal(10, 2) NOT NULL,
+    quantity int NOT NULL,
     total decimal(10, 2) NOT NULL,
     mode_of_payment varchar(50) NOT NULL,
     order_date datetime NOT NULL,
