@@ -3,7 +3,7 @@ session_start();
 
 date_default_timezone_set('Asia/Manila');
 
-define('SITEURL', 'http://localhost/food_system/');
+define('SITEURL', 'http://localhost/FoodSystem/');
 define('LOCALHOST', 'localhost');
 define('DB_USERNAME', 'root');
 define('DB_PASSWORD', '');
