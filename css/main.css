@@ -1046,7 +1046,6 @@ div.contact-wrapper {
 .contact-input input[type]:read-only ~ label,
 .contact-input input[type]:focus ~ label,
 .contact-input input[type]:valid ~ label,
-.contact-textarea textarea:read-only ~ label,
 .contact-textarea textarea:valid ~ label,
 .contact-textarea textarea:focus ~ label {
     color: rgb(224,107,5);

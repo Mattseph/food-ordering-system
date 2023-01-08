@@ -33,8 +33,15 @@
 
 			<div class="form-group">
 				<div class="placeholder">
-					<input type="number" step="0.01" name="foodprice" id="price" required>
+					<input type="number" step="0.01" name="foodprice" id="price" value="1" required>
 					<label for="price">Price</label>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="placeholder">
+					<input type="number" step="1" name="available_quantity" id="available_quantity" value="1" required>
+					<label for="available_quantity">Available Quantity</label>
 				</div>
 			</div>
 
@@ -141,6 +148,7 @@
 			$food_name = htmlspecialchars(ucwords($_POST['foodname']));
 			$description = htmlspecialchars($_POST['description']);
 			$food_price = htmlspecialchars($_POST['foodprice']);
+			$available_quantity = htmlspecialchars($_POST['available_quantity']);
 
 
 			if (filter_has_var(INPUT_POST, 'active')) {
@@ -178,6 +186,7 @@
 					food_name,
 					description,
 					food_price,
+					available_quantity,
 					image_name,
 					active
 				)
@@ -188,6 +197,7 @@
 					'$food_name', 
 					'$description',
 					$food_price,
+					$available_quantity,
 					'$image_name',
 					'$active'
 				)";

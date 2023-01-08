@@ -48,6 +48,7 @@ include '../partials/head.php';
 				<th>Food ID</th>
 				<th>Food Name</th>
 				<th>Price</th>
+				<th>Available Quantity</th>
 				<th>Image</th>
 				<th>Active</th>
 				<th>Actions</th>
@@ -64,6 +65,7 @@ include '../partials/head.php';
 					$food_id = $row['food_id'];
 					$food_name = $row['food_name'];
 					$price = $row['food_price'];
+					$available_quantity = $row['available_quantity'];
 					$image_name = $row['image_name'];
 					$active = $row['active'];
 
@@ -73,6 +75,7 @@ include '../partials/head.php';
 						<td><?php echo $IDD++; ?></td>
 						<td><?php echo $food_name; ?></td>
 						<td>$<?php echo $price; ?></td>
+						<td><?php echo $available_quantity; ?></td>
 						<td>
 							<?php
 							if ($image_name == "") {
