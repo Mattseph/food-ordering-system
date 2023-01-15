@@ -28,26 +28,26 @@ include '../configuration.php';
                     </li>
 
                     <li>
-                        <a href="<?php echo SITEURL; ?>frontend/categories.php">Category</a>
+                        <a href="<?php echo SITEURL; ?>customer/categories.php">Category</a>
                     </li>
 
                     <li>
-                        <a href="<?php echo SITEURL; ?>frontend/menu.php">Menu</a>
+                        <a href="<?php echo SITEURL; ?>customer/menu.php">Menu</a>
                     </li>
 
                     <li>
-                        <a href="<?php echo SITEURL; ?>frontend/contact.php">Contact Us</a>
+                        <a href="<?php echo SITEURL; ?>customer/contact.php">Contact Us</a>
                     </li>
                     <?php
                     if (isset($_SESSION['user_id'])) {
                     ?>
-                        <li><a href="<?php echo SITEURL; ?>frontend/logout.php">Log out</a></li>
+                        <li><a href="<?php echo SITEURL; ?>customer/logout.php">Log out</a></li>
                     <?php
                     } else {
                     ?>
-                        <li><a href="<?php echo SITEURL; ?>frontend/signin.php">Sign in</a></li>
+                        <li><a href="<?php echo SITEURL; ?>customer/signin.php">Sign in</a></li>
                         <li>/</li>
-                        <li><a href="<?php echo SITEURL; ?>frontend/signup.php">Sign Up</a></li>
+                        <li><a href="<?php echo SITEURL; ?>customer/signup.php">Sign Up</a></li>
                     <?php
                     }
                     ?>
@@ -59,7 +59,7 @@ include '../configuration.php';
                 <?php
                 $filter_input = filter_input(INPUT_GET, 'search', FILTER_SANITIZE_SPECIAL_CHARS);
                 ?>
-                <form action="<?php echo SITEURL; ?>frontend/food-search.php" method="GET" enctype="multipart/form-data">
+                <form action="<?php echo SITEURL; ?>customer/food-search.php" method="GET" enctype="multipart/form-data">
                     <input type="search" name="search" placeholder="Search For Food.." value="<?php echo $filter_input; ?>" required>
                     <input type="submit" name="submit" value="Search" class="btn btn-primary">
 

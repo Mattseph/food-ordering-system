@@ -19,9 +19,9 @@
         unset($_SESSION['update']);
     }
 
-    if (isset($_SESSION['no_riderid_found'])) {
-        echo $_SESSION['no_riderid_found'];
-        unset($_SESSION['no_riderid_found']);
+    if (isset($_SESSION['no_rider_data_found'])) {
+        echo $_SESSION['no_rider_data_found'];
+        unset($_SESSION['no_rider_data_found']);
     }
 
 
@@ -46,7 +46,7 @@
 
             <?php
             //Selecting all from table admin.
-            $sql = "SELECT * from delivery_rider";
+            $sql = "SELECT * from delivery_rider ORDER BY rider_id DESC";
             //Executiong the query
             $res = mysqli_query($conn, $sql);
 

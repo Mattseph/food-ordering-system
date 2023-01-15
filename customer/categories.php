@@ -1,4 +1,4 @@
-<?php include 'front-partials/header.php'; ?>
+<?php include 'customer-partials/header.php'; ?>
 
 <!-- Categories Section Starts Here -->
 <section class="category-wrapper">
@@ -17,7 +17,7 @@
                     $image_name = $row['image_name'];
             ?>
 
-                    <a href="<?php echo SITEURL; ?>frontend/category-foods.php?category_id=<?php echo $category_id; ?>">
+                    <a href="<?php echo SITEURL; ?>customer/category-foods.php?category_id=<?php echo $category_id; ?>">
                         <?php
                         if ($image_name == "") {
                             echo "<div class='fail'>Image not available</div>";

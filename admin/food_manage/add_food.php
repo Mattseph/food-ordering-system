@@ -205,12 +205,23 @@
 			$res = mysqli_query($conn, $sql);
 
 			if ($res) {
-				$_SESSION['add'] = "<div id='message' class='success food-message'><img src='../../images/logo/successful.svg' alt='successful' class='successful'><span>Food Added Successfully</span></div>";
+				$_SESSION['add'] = "
+					<div class='alert alert--success' id='alert'>
+						<div class='alert__message'>
+							Food Added Successfully
+						</div>
+					</div>
+				";
 
 				header('location:' . SITEURL . 'admin/food_manage/food_manage.php');
 			} else {
-				$_SESSION['add'] = "<div id='message' class='fail food-message'><img src='../../images/logo/warning.svg'alt='warning' class='warning'><span>Failed to Add Food</span></div>";
-
+				$_SESSION['add'] = "
+					<div class='alert alert--danger' id='alert'>
+						<div class='alert__message'>	
+							Failed to Add Food
+						</div>
+					</div>
+				";
 				header('location:' . SITEURL . 'admin/food_manage/food_manage.php');
 			}
 		}

@@ -39,9 +39,10 @@
 		unset($_SESSION['change_pass']);
 	}
 
-	if (isset($_SESSION['no_adminid_found'])) {
-		echo $_SESSION['no_adminid_found'];
-		unset($_SESSION['no_adminid_found']);
+
+	if (isset($_SESSION['no_admin_data_found'])) {
+		echo $_SESSION['no_admin_data_found'];
+		unset($_SESSION['no_admin_data_found']);
 	}
 	?>
 	<div class="wrapper">
@@ -64,7 +65,7 @@
 
 			<?php
 			//Selecting all from table admin.
-			$sql = "SELECT * from admin_list";
+			$sql = "SELECT * from admin_list ORDER BY admin_id DESC";
 			//Executiong the query
 			$res = mysqli_query($conn, $sql);
 

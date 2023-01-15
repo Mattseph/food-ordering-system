@@ -127,15 +127,33 @@
             $res = mysqli_query($conn, $sql);
 
             if ($res) {
-                $_SESSION['add'] = "<div id='message' class='success signup-message'><img src='../images/logo/successful.svg' alt='successful' class='successful'><span>Registered Successfully</span></div>";
-                header('location:' . SITEURL . 'frontend/signin.php');
+                $_SESSION['add'] = "
+                    <div class='alert alert--success' id='alert'>
+                        <div class='alert__message'>
+                            Registered Successfully
+                        </div>
+                    </div>
+                ";
+                header('location:' . SITEURL . 'customer/signin.php');
             } else {
-                $_SESSION['add'] = "<div id='message' class=''fail signup-message'><img src='../images/logo/warning.svg'alt='warning' class='warning'><span>Failed to Register</span></div>";
-                header('location:' . SITEURL . 'frontend/signup.php');
+                $_SESSION['add'] = "
+                    <div class='alert alert--danger' id='alert'>
+                        <div class='alert__message'>	
+                            Failed to Register
+                        </div>
+			        </div>
+                ";
+                header('location:' . SITEURL . 'customer/signup.php');
             }
         } else {
-            $_SESSION['add'] = "<div id='message' class='fail signup-message'><img src='../images/logo/warning.svg'alt='warning' class='warning'><span>Password Didn't Match</span></div>";
-            header('location:' . SITEURL . 'frontend/signup.php');
+            $_SESSION['add'] = "
+                <div class='alert alert--danger' id='alert'>
+                    <div class='alert__message'>	
+                        Password Did Not Match
+                    </div>
+                </div>
+            ";
+            header('location:' . SITEURL . 'customer/signup.php');
         }
     }
     ?>

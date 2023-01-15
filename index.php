@@ -27,26 +27,26 @@ include 'configuration.php';
                     </li>
 
                     <li>
-                        <a href="<?php echo SITEURL; ?>frontend/categories.php">Category</a>
+                        <a href="<?php echo SITEURL; ?>customer/categories.php">Category</a>
                     </li>
 
                     <li>
-                        <a href="<?php echo SITEURL; ?>frontend/menu.php">Menu</a>
+                        <a href="<?php echo SITEURL; ?>customer/menu.php">Menu</a>
                     </li>
 
                     <li>
-                        <a href="<?php echo SITEURL; ?>frontend/contact.php">Contact Us</a>
+                        <a href="<?php echo SITEURL; ?>customer/contact.php">Contact Us</a>
                     </li>
                     <?php
                     if (isset($_SESSION['user_id'])) {
                     ?>
-                        <li><a href="<?php echo SITEURL; ?>frontend/logout.php">Log out</a></li>
+                        <li><a href="<?php echo SITEURL; ?>customer/logout.php">Log out</a></li>
                     <?php
                     } else {
                     ?>
-                        <li><a href="<?php echo SITEURL; ?>frontend/signin.php">Sign in</a></li>
+                        <li><a href="<?php echo SITEURL; ?>customer/signin.php">Sign in</a></li>
                         <li>/</li>
-                        <li><a href="<?php echo SITEURL; ?>frontend/signup.php">Sign Up</a></li>
+                        <li><a href="<?php echo SITEURL; ?>customer/signup.php">Sign Up</a></li>
                     <?php
                     }
                     ?>
@@ -58,7 +58,7 @@ include 'configuration.php';
                 <?php
                 $filter_input = filter_input(INPUT_GET, 'search', FILTER_SANITIZE_SPECIAL_CHARS);
                 ?>
-                <form action="<?php echo SITEURL; ?>frontend/food-search.php" method="GET" enctype="multipart/form-data">
+                <form action="<?php echo SITEURL; ?>customer/food-search.php" method="GET" enctype="multipart/form-data">
                     <input type="search" name="search" placeholder="Search For Food.." value="<?php echo $filter_input; ?>" required>
                     <input type="submit" name="submit" value="Search" class="btn btn-primary">
 
@@ -84,9 +84,9 @@ include 'configuration.php';
         ?>
         <div class="image-container">
             <div class="images">
-                <img src="images/frontend-bg/landingpage1.jpg">
-                <img src="images/frontend-bg/landingpage2.jpg">
-                <img src="images/frontend-bg/landingpage3.jpg">
+                <img src="images/customer-bg/landingpage1.jpg">
+                <img src="images/customer-bg/landingpage2.jpg">
+                <img src="images/customer-bg/landingpage3.jpg">
 
             </div>
         </div>
@@ -117,7 +117,7 @@ include 'configuration.php';
                         $image_name = $row['image_name'];
                 ?>
 
-                        <a href="<?php echo SITEURL; ?>frontend/category-foods.php?category_id=<?php echo $category_id; ?>">
+                        <a href="<?php echo SITEURL; ?>customer/category-foods.php?category_id=<?php echo $category_id; ?>">
                             <?php
                             if ($image_name == "") {
                                 echo "<div class='fail'>Image not available</div>";
@@ -191,7 +191,7 @@ include 'configuration.php';
                                 <p class="food-price">Price: <span>$<?php echo $food_price; ?></span></p>
                                 <p class="food-detail">Description: <span><?php echo $description; ?></span></p>
                                 <div class="food-menu-button">
-                                    <a href="<?php echo SITEURL; ?>frontend/order_details.php?food_id=<?php echo $food_id; ?>" class="btn">Order Here</a>
+                                    <a href="<?php echo SITEURL; ?>customer/order_details.php?food_id=<?php echo $food_id; ?>" class="btn">Order Here</a>
                                 </div>
                             </div>
                         </div>
@@ -204,8 +204,6 @@ include 'configuration.php';
                 }
 
                 ?>
-
-
             </section>
         </section>
     </section>
@@ -344,17 +342,34 @@ include 'configuration.php';
         $result = mysqli_query($conn, $sql);
 
         if ($result) {
-            $_SESSION['contact'] = "<div id='message' class='success contact-message'><img src='images/logo/successful.svg' alt='successful' class='successful'><span>Message Sent Successfully</span></div>";
+            $_SESSION['contact'] = "
+            <div class='alert alert--success' id='alert'>
+                <div class='alert__message'>
+                    Message Sent Successfully
+                </div>
+		    </div>
+            ";
 
             header('location:' . SITEURL);
         } else {
-            $_SESSION['contact'] = "<div id='message' class='fail contact-message'><img src='images/logo/warning.svg' alt='warning' class='warning'><span>Message Sent Failed</span></div>";
-
+            $_SESSION['contact'] = "
+            <div class='alert alert--danger' id='alert'>
+                <div class='alert__message'>	
+                    Failed to Sent Message
+                </div>
+            </div>
+            ";
             header('location:' . SITEURL);
         }
     } else {
-        $_SESSION['signin-required'] = "<div id='message' class='fail contact-message'><img src='../images/logo/warning.svg' alt='warning' class='warning'><span>Sign in Required</span></div>";
-        header('location:' . SITEURL . 'frontend/signin.php');
+        $_SESSION['signin-required'] = "
+            <div class='alert alert--danger' id='alert'>
+				<div class='alert__message'>	
+					Sign in Required
+				</div>
+			</div>
+        ";
+        header('location:' . SITEURL . 'customer/signin.php');
     }
 
     ob_end_flush();

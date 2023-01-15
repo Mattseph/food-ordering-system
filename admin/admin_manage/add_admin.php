@@ -89,19 +89,37 @@ if (filter_has_var(INPUT_POST, 'submit')) {
 
 		if ($res) {
 			//To show display messege once data has been inserted
-			$_SESSION['add'] = "<div id='message' class='success admin-message'><img src='../../images/logo/successful.svg' alt='successful' class='successful'><span>Admin Added Successfully</span></div>";
+			$_SESSION['add'] = "
+				<div class='alert alert--success' id='alert'>
+                    <div class='alert__message'>
+                        Admin Profile Created Successfully
+                    </div>
+                </div>
+			";
 
 			//Redirecting page to manage admin
 			header("location:" . SITEURL .	'admin/admin_manage/admin_manage.php');
 		} else {
 			//To show display messege once data has been inserted
-			$_SESSION['add'] = "<div id='message' class='fail admin-message'><img src='../../images/logo/warning.svg'alt='warning' class='warning'><span>Failed to add admin</span></div>";
+			$_SESSION['add'] = "
+				<div class='alert alert--danger' id='alert'>
+					<div class='alert__message'>	
+						Failed to Create Admin Profile
+					</div>
+				</div>
+			";
 
 			//Redirecting page to add admin
 			header("location:" . SITEURL .	'admin/admin_manage/add_admin.php');
 		}
 	} else {
-		$_SESSION['add'] = "<div id='message' class='fail admin-message'><img src='../../images/logo/warning.svg' alt='warning' class='warning'><span>Password did not match</span></div>";
+		$_SESSION['add'] = "
+			<div class='alert alert--danger' id='alert'>
+				<div class='alert__message'>	
+					Password Did Not Match
+				</div>
+			</div>
+		";
 
 		//Redirecting page to add admin
 		header("location:" . SITEURL . 'admin/admin_manage/add_admin.php');

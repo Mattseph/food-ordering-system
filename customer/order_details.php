@@ -1,6 +1,6 @@
 <?php
 ob_start();
-include 'front-partials/header.php';
+include 'customer-partials/header.php';
 ?>
 <?php
 $_SESSION['ID'] = bin2hex(random_bytes(10));
@@ -235,19 +235,37 @@ if (isset($_SESSION['user_id'])) {
         $res2 = mysqli_query($conn, $sql2);
 
         if ($res2) {
-            $_SESSION['order'] = "<div id='message' class='success order-message'><img src='../images/logo/successful.svg' alt='successful' class='successful'><span>Food Ordered Successfully</span></div>";
+            $_SESSION['order'] = "
+                <div class='alert alert--success' id='alert'>
+                    <div class='alert__message'>
+                        Food Ordered Successfully
+                    </div>
+                </div>
+            ";
 
             $_SESSION['food_id'] = $food_id;
 
-            header('location:' . SITEURL . 'frontend/order_summary.php');
+            header('location:' . SITEURL . 'customer/order_summary.php');
         } else {
-            $_SESSION['order'] = "<div id='message' class='fail order-message'><img src='../images/logo/warning.svg' alt='warning' class='warning'><span>Order Failed</span</div>";
-            header('location:' . SITEURL . 'frontend/order_details.php');
+            $_SESSION['order'] = "
+                <div class='alert alert--danger' id='alert'>
+                    <div class='alert__message'>	
+                        Order Failed
+                    </div>
+                </div>
+            ";
+            header('location:' . SITEURL . 'customer/order_details.php');
         }
     }
 } else {
-    $_SESSION['signin-required'] = "<div id='message' class='fail contact-message'><img src='../images/logo/warning.svg' alt='warning' class='warning'><span>Sign in Required</span></div>";
-    header('location:' . SITEURL . 'frontend/signin.php');
+    $_SESSION['signin-required'] = "
+        <div class='alert alert--danger' id='alert'>
+            <div class='alert__message'>	
+                Sign in Required
+            </div>
+        </div>
+    ";
+    header('location:' . SITEURL . 'customer/signin.php');
 }
 ob_end_flush();
 ?>

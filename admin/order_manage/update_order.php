@@ -28,7 +28,13 @@ include '../partials/head.php';
             }
         }
     } else {
-        $_SESSION['no_orderid_found'] = "<div id='message' class='fail order-message'><img src='../../images/logo/warning.svg' alt='warning' class='warning'><span>Order id not found</span></div>";
+        $_SESSION['no_order_id_found'] = "
+            <div class='alert alert--danger' id='alert'>
+                <div class='alert__message'>	
+                    Order Id Not Found
+                </div>
+            </div>
+        ";
 
         header('location:' . SITEURL . 'admin/order_manage/order_manage.php');
     }
@@ -149,11 +155,23 @@ include '../partials/head.php';
             $res3 = mysqli_query($conn, $sql3);
 
             if ($res3) {
-                $_SESSION['update'] = "<div id='message' class='success order-message'><img src='../../images/logo/successful.svg' alt='successful' class='successful'><span>Order Status Updated Successfully</span></div>";
+                $_SESSION['update'] = "
+                    <div class='alert alert--success' id='alert'>
+                        <div class='alert__message'>
+                            Order Status Updated Successfully
+                        </div>
+                    </div>
+                ";
 
                 header('location:' . SITEURL . 'admin/order_manage/order_manage.php');
             } else {
-                $_SESSION['update'] = "<div id='message' class='fail order-message'><img src='../../images/logo/warning.svg' alt='warning' class='warning'><span>Failed to Update Order Status</span></div>";
+                $_SESSION['update'] = "
+                    <div class='alert alert--danger' id='alert'>
+                        <div class='alert__message'>	
+                            Failed to Update Order Status
+                        </div>
+                    </div>
+                ";
 
                 header('location:' . SITEURL . 'admin/order_manage/order_manage.php');
             }

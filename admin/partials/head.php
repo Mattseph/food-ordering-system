@@ -47,7 +47,7 @@ include '../../login_checker.php';
 					<a href="<?php echo SITEURL; ?>admin/supplier_manage/supplier_manage.php">Supplier</a>
 				</li>
 				<li>
-					<a href="<?php echo SITEURL; ?>frontend/logout.php">Log out</a>
+					<a href="<?php echo SITEURL; ?>customer/logout.php">Log out</a>
 				</li>
 			</ul>
 		</div>

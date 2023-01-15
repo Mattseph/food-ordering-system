@@ -1,26 +1,22 @@
-<?php include 'front-partials/header.php'; ?>
+<?php include 'customer-partials/header.php'; ?>
 
 <!-- Food Menu Section Starts Here -->
 <section class="food-wrapper">
     <section class="food-container">
         <h2 style="position: absolute; top: 100px;">Food Menu</h2>
-        <?php
-        //Get the searched keyword
-        if (filter_has_var(INPUT_GET, 'search')) {
-            $search = filter_var($_GET['search'], FILTER_SANITIZE_SPECIAL_CHARS);
-        }
 
-
-        ?>
-        <h3 style="position: absolute; top: 200px;">Food related to <u>"<?php echo $search ?>"</u></h3>
         <section class="food-menu">
-            <?php
 
-            $sql = "SELECT * FROM food_list WHERE food_name LIKE '%$search%' OR description LIKE '%$search%'";
+            <?php
+            //Display food that's active.
+            $sql = "SELECT * FROM food_list WHERE active = 'Yes'";
+            //Execute the query above.
             $res = mysqli_query($conn, $sql);
+            //Number of rows in the result set.
             $count = mysqli_num_rows($res);
 
             if ($count > 0) {
+                //Get the Food Available in Database.
                 while ($row = mysqli_fetch_assoc($res)) {
                     $food_id = $row['food_id'];
                     $food_name = $row['food_name'];
@@ -49,23 +45,24 @@
                             <p class="food-price">Price: <span>$<?php echo $food_price; ?></span></p>
                             <p class="food-detail">Description: <span><?php echo $description; ?></span></p>
                             <div class="food-menu-button">
-                                <a href="<?php echo SITEURL; ?>frontend/order_details.php?food_id=<?php echo $food_id; ?>" class="btn btn-primary">Order Here</a>
+                                <a href="<?php echo SITEURL; ?>customer/order_details.php?food_id=<?php echo $food_id; ?>" class="btn">Order Here</a>
                             </div>
                         </div>
                     </div>
 
-
             <?php
+
                 }
             } else {
-                echo "<div><h3>No related food</h3></div>";
+                echo "<div>Food Not Found</div>";
             }
+
             ?>
+
 
         </section>
     </section>
 </section>
-
 <!-- Food Menu Section Ends Here -->
 
 </body>

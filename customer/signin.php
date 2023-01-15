@@ -115,20 +115,37 @@ if ($user && $pass) {
 
 		$_SESSION['user'] = "<div id='message' class='success signin-message'><img src='../../images/logo/successful.svg' alt='successful' class='successful'><span>Welcome Admin {$username}!</span></div>";
 
+		$_SESSION['user'] = "
+		<div class='alert alert--success' id='alert'>
+			<div class='alert__message'>
+				Welcome Admin {$username}!
+			</div>
+		</div>";
 		$_SESSION['user_id'] = $row['admin_id'];
 
 		header('location:' . SITEURL . 'admin/admin_manage/admin_manage.php');
 	} elseif ($count2 === 1) {
 		$row2 = mysqli_fetch_assoc($res2);
-
-		$_SESSION['user'] = "<div id='message' class='success signin-message'><img src='images/logo/successful.svg' alt='successful' class='successful'><span>Welcome User {$username}!</span></div>";
+		$_SESSION['user'] = "
+			<div class='alert alert--success' id='alert'>
+				<div class='alert__message'>
+					Sign in Successfully
+				</div>
+			</div>
+		";
 
 		$_SESSION['user_id'] = $row2['user_id'];
 
 		header('location:' . SITEURL);
 	} else {
-		$_SESSION['incorrect-input'] = "<div id='message' class='fail signin-message'><img src='../images/logo/warning.svg' alt='warning' class='warning'><span>Sign in failed, please input correct username and password</span></div>";
-		header('location:' . SITEURL . 'frontend/signin.php');
+		$_SESSION['incorrect-input'] = "
+			<div class='alert alert--danger' id='alert'>
+				<div class='alert__message'>	
+					Sign in Failed, Please Enter Correct Username and Password.
+				</div>
+			</div>
+		";
+		header('location:' . SITEURL . 'customer/signin.php');
 	}
 } else {
 	$error['username'] = 'Please enter valid username.';

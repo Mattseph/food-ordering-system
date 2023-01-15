@@ -128,12 +128,24 @@ if (filter_has_var(INPUT_POST, 'submit')) {
 
     if ($res) {
         //To show display messege once data has been inserted
-        $_SESSION['add'] = "<div id='message' class='success supplier-message'><img src='../../images/logo/successful.svg' alt='successful' class='successful'><span>Supplier Added Successfully</span></div>";
+        $_SESSION['add'] = "
+            <div class='alert alert--success' id='alert'>
+                <div class='alert__message'>
+                    Supplier Profile Created Successfully
+                </div>
+            </div>
+        ";
         //Redirecting page to manage admin
         header("location:" . SITEURL . 'admin/supplier_manage/supplier_manage.php');
     } else {
         //To show display messege once data has been inserted
-        $_SESSION['add'] = "<div id='message' class='fail supplier-message'><img src='../../images/logo/warning.svg' alt='warning' class='warning'><span>Failed to Add Supplier</span></div>";
+        $_SESSION['add'] = "
+            <div class='alert alert--danger' id='alert'>
+                <div class='alert__message'>	
+                    Failed to Create Supplier Profile
+                </div>
+            </div>
+        ";
         //Redirecting page to add admin
         header("location:" . SITEURL . 'admin/supplier_manage/add_supplier.php');
     }

@@ -3,26 +3,29 @@
     src: url("../font/Sansation-Regular-webfont.woff") format("woff");
     font-weight: normal;
     font-style: normal;
-  }
-  @font-face {
+}
+
+@font-face {
     font-family: "myFont";
     src: url("../font/Sansation-Bold-webfont.woff") format("woff");
     font-weight: bold;
     font-style: normal;
-  }
-  @font-face {
+}
+
+@font-face {
     font-family: "myFont";
     src: url("../font/Sansation-Italic-webfont.woff") format("woff");
     font-weight: normal;
     font-style: italic;
-  }
-  @font-face {
+}
+
+@font-face {
     font-family: "myFont";
     src: url("../font/Sansation-BoldItalic-webfont.woff") format("woff");
     font-weight: bold;
     font-style: italic;
-  }
-  
+}
+
 /* CSS for All */
 * {
     box-sizing: border-box;
@@ -34,12 +37,14 @@
 textarea {
     resize: none;
 }
+
 .img-responsive {
     width: 100%;
 }
 
 .btn {
-    padding: 8px 12px;;
+    padding: 8px 12px;
+    ;
     border: none;
     font-size: 1rem;
     color: white;
@@ -49,7 +54,7 @@ textarea {
 
 h2 {
     margin-top: 3rem;
-    color: rgb(255,198,27);
+    color: rgb(255, 198, 27);
     font-size: 2rem;
 
     text-align: center;
@@ -57,12 +62,13 @@ h2 {
 
 h3 {
     font-size: 1.5rem;
-    color:rgb(255,198,27);
+    color: rgb(255, 198, 27);
 }
 
 h4 {
-    color: rgb(255,198,27);
+    color: rgb(255, 198, 27);
 }
+
 fieldset {
     border: 1px solid white;
     margin: 5%;
@@ -75,52 +81,78 @@ fieldset {
     position: relative;
 }
 
-.success {
-    width: 100%;
-    height: 35px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    color: rgb(255, 255, 255);
-    background: rgb(0, 255, 0);
-    text-align: center;
-    line-height: 2;
-    font-weight: 700;
-}
 
-.fail {
-    width: 100%;
-    height: 35px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    color: rgb(255, 255, 255);
-    background: rgb(255, 0, 0);
-    text-align: center; 
-    font-weight: 700;
-    vertical-align: center;
-}
-
-.signup-message, 
-.signin-message, 
-.contact-message, 
-.order-message {
+.alert {
+    min-width: 14.0625rem;
     position: absolute;
-    top: 0;
-    z-index: 5;
+    top: 30px;
+    right: 0.8125rem;
+    padding: 1rem;
+    border-radius: 0.625rem;
+    box-shadow: 0px 3px 18px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    z-index: 10;
+    -webkit-animation: show 1s ease;
+    animation: show 1s ease;
 }
 
-img.warning {
-    width: 25px;
-    height: 25px;
+.alert--success {
+    background: #f7fffb;
+    border-left: 0.25rem solid #02b854;
 }
 
-img.successful {
-    width: 25px;
-    height: 25px;
+.alert--success .alert__message {
+    color: #02b854;
 }
+
+.alert--danger {
+    background: #fff7f7;
+    border-left: 0.25rem solid #f94f51;
+}
+
+.alert--danger .alert__message {
+    color: #f94f51;
+}
+
+.alert__message {
+    font-size: 0.875rem;
+}
+
+@-webkit-keyframes show {
+    0% {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    50% {
+        transform: translateX(-40px);
+        opacity: 0.7;
+    }
+
+    to {
+        opacity: 1;
+    }
+
+}
+
+@keyframes show {
+    0% {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    50% {
+        transform: translateX(-40px);
+        opacity: 0.7;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
 
 a {
     text-decoration: none;
@@ -128,7 +160,7 @@ a {
 
 /* Register Section */
 
-main.register-container{
+main.register-container {
     width: 100%;
     height: 100vh;
     display: flex;
@@ -151,7 +183,7 @@ main.register-container{
 }
 
 main.register-container h1 {
-    color: rgb(224,107,5)
+    color: rgb(224, 107, 5)
 }
 
 .register {
@@ -171,7 +203,7 @@ main.register-container h1 {
     justify-content: center;
     align-items: center;
     gap: 10px;
-    padding: 30px;  
+    padding: 30px;
     box-shadow: 15px 15px 30px #bebebe, -15px -15px 30px #ffffff;
 }
 
@@ -185,7 +217,7 @@ main.register-container h1 {
     border: none;
     outline: none;
     cursor: pointer;
-    
+
 }
 
 .register-input input[type] {
@@ -206,9 +238,9 @@ main.register-container h1 {
     transition: all .2s linear;
 }
 
-.register-input input[type]:valid ~ label,
-.register-input input[type]:focus ~ label {
-    color: rgb(224,107,5);
+.register-input input[type]:valid~label,
+.register-input input[type]:focus~label {
+    color: rgb(224, 107, 5);
     transform: translateY(-13px);
     font-size: 0.9rem;
     border: none;
@@ -227,14 +259,14 @@ section button[type="submit"] {
     outline: none;
     padding: 8px 12px;
     cursor: pointer;
-    background-color: rgb(224,107,5);
+    background-color: rgb(224, 107, 5);
     color: white;
     text-align: center;
     transition: all 0.2s ease-in-out;
 }
 
 section button[type="submit"]:hover {
-    background: rgb(254,225,135);
+    background: rgb(254, 225, 135);
     scale: 1.02;
 
 }
@@ -250,7 +282,7 @@ section button[type="submit"]:hover {
 }
 
 
-.signin-background{
+.signin-background {
     width: 50%;
     height: 100%;
     z-index: -1;
@@ -272,15 +304,16 @@ section button[type="submit"]:hover {
     justify-content: center;
     align-items: center;
 }
+
 .signin-row {
     width: 50%;
     height: 53%;
     color: black;
     padding: 30px;
-    border-radius: 20px; 
-    background: rgb(255,255,255);
+    border-radius: 20px;
+    background: rgb(255, 255, 255);
     box-shadow: 15px 15px 30px #bebebe, -15px -15px 30px #ffffff;
-    
+
 }
 
 .signin {
@@ -293,7 +326,7 @@ section button[type="submit"]:hover {
     gap: 10px;
 }
 
-.signin-img-container img {  
+.signin-img-container img {
     width: 40px;
     height: 40px;
     margin: 0 10px;
@@ -315,8 +348,8 @@ section button[type="submit"]:hover {
     font-size: 1rem;
     border: none;
     background: rgb(255, 255, 255);
-    -webkit-box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
-    box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
+    -webkit-box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+    box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
 }
 
 input[type]:focus,
@@ -335,9 +368,9 @@ textarea[type]:focus {
     transition: all .2s linear;
 }
 
-.signin-form-group input[type]:valid ~ label,
-.signin-form-group input[type]:focus ~ label {
-    color: rgb(255,198,27);
+.signin-form-group input[type]:valid~label,
+.signin-form-group input[type]:focus~label {
+    color: rgb(255, 198, 27);
     transform: translateY(-13px);
     font-weight: 700;
     font-size: .9rem;
@@ -349,8 +382,8 @@ textarea[type]:focus {
     width: 100%;
 }
 
-.signout-form-button a{
-    color: rgb(255,198,27);
+.signout-form-button a {
+    color: rgb(255, 198, 27);
     text-decoration: underline;
     font-weight: bold;
 }
@@ -362,17 +395,17 @@ textarea[type]:focus {
     border-radius: 8px 12px;
     margin-top: 20px;
     margin-bottom: 5px;
-    background: rgb(255,255,255);
-    color: rgb(255,198,27);
+    background: rgb(255, 255, 255);
+    color: rgb(255, 198, 27);
     font-weight: bold;
     font-size: 1.2rem;
     z-index: 1;
-    -webkit-box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
-    box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
+    -webkit-box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+    box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
     transition: all 250ms;
     overflow: hidden;
 }
-   
+
 .signin-form-button button::before {
     content: "";
     position: absolute;
@@ -380,20 +413,22 @@ textarea[type]:focus {
     left: 0;
     height: 100%;
     width: 0;
-    background-color: rgb(255,198,27);
+    background-color: rgb(255, 198, 27);
     z-index: -1;
-    -webkit-box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
-    box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
+    -webkit-box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+    box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
     transition: all 0.1s ease-in;
 }
-   
-.signin-form-button button:hover, .signin-form-button a:hover{ 
-    color: rgb(255,255,255);
+
+.signin-form-button button:hover,
+.signin-form-button a:hover {
+    color: rgb(255, 255, 255);
 }
-   
+
 .signin-form-button button:hover::before {
     width: 100%;
 }
+
 /*End of Login*/
 
 /* Navbar section */
@@ -416,6 +451,7 @@ nav {
     gap: 10px;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
+
 div.logo {
     display: flex;
     flex-direction: row;
@@ -436,8 +472,9 @@ div.logo .food-title-first {
     font-weight: bold;
 
 }
+
 div.logo .food-title-second {
-    color: rgb(255,198,27);
+    color: rgb(255, 198, 27);
     font-style: italic;
 
 }
@@ -459,7 +496,7 @@ ul.nav-bar a {
     font-weight: bold;
     font-size: 1.1rem;
     text-align: center;
-    color: rgb(255,198,27);
+    color: rgb(255, 198, 27);
     text-decoration: none;
     transition: all 0.2s ease;
 }
@@ -469,7 +506,7 @@ ul.nav-bar a:hover {
     background: white;
     border-radius: 5px;
     box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
-    
+
 }
 
 .search {
@@ -479,6 +516,7 @@ ul.nav-bar a:hover {
     flex: 20%;
 
 }
+
 .search input[type="search"] {
     flex: 70%;
     height: 40px;
@@ -486,27 +524,27 @@ ul.nav-bar a:hover {
     cursor: pointer;
     font-size: 1rem;
     outline: none;
-    border: 3px solid rgb(255,198,27);
+    border: 3px solid rgb(255, 198, 27);
     padding: 8px 12px;
     border-radius: 20px;
     transition: all 0.2s ease;
 }
 
-.search input[type="submit"] {  
+.search input[type="submit"] {
     flex: 30%;
     border: none;
     outline: none;
     padding: 8px 12px;
     border-radius: 20px;
     cursor: pointer;
-    background-color: rgb(224,107,5);
+    background-color: rgb(224, 107, 5);
     color: white;
     text-align: center;
     transition: all 0.2s ease-in-out;
 }
 
 
-.search input[type="search"]:focus { 
+.search input[type="search"]:focus {
     height: 45px;
     cursor: text;
     background-color: black;
@@ -514,7 +552,7 @@ ul.nav-bar a:hover {
 }
 
 .search input[type="submit"]:hover {
-    background: rgb(254,225,135);
+    background: rgb(254, 225, 135);
     scale: 1.05;
 
 }
@@ -530,23 +568,24 @@ div.landing-container {
     display: flex;
     flex-direction: row;
     background-attachment: fixed;
- 
+
 }
 
 div.image-container {
     width: 50%;
-    height: 100%;  
-    
+    height: 100%;
+
 }
 
 div.images {
     display: flex;
     align-items: stretch;
 }
+
 div.images img {
     width: 32.9%;
     height: 100vh;
-    object-fit: cover; 
+    object-fit: cover;
 }
 
 div.heading {
@@ -555,7 +594,7 @@ div.heading {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    color:rgb(255,198,27);
+    color: rgb(255, 198, 27);
     z-index: -1;
     font-size: 2rem;
     font-weight: bold;
@@ -570,7 +609,7 @@ div.header-text {
     font-weight: normal;
     line-height: 1.5;
     margin-top: 10px;
-    
+
 }
 
 /* CSS for Categories */
@@ -579,12 +618,12 @@ div.header-text {
     width: 100%;
     height: 100vh;
     position: sticky;
-    top: 80px;  
+    top: 80px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-image: url('../images/frontend-bg/category-bg.jpg');
+    background-image: url('../images/customer-bg/category-bg.jpg');
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
@@ -611,7 +650,7 @@ div.header-text {
     align-items: center;
     gap: 80px;
     padding: 50px;
-    
+
 }
 
 .category-wrapper a {
@@ -653,7 +692,7 @@ div.header-text {
     height: 100vh;
     position: sticky;
     top: 80px;
-    background-image: url('../images/frontend-bg/menu-bg.jpg');
+    background-image: url('../images/customer-bg/menu-bg.jpg');
     background-repeat: no-repeat;
     background-position: center;
     background-attachment: scroll;
@@ -662,7 +701,7 @@ div.header-text {
 }
 
 .food-container {
-    width: 100%; 
+    width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -689,12 +728,12 @@ div.header-text {
     border-radius: 15px;
     padding: .7rem;
     gap: 15px;
-    background: rgba( 255, 255, 255, 0.9 );
-    box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
-    backdrop-filter: blur( 7.5px );
-    -webkit-backdrop-filter: blur( 7.5px );
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    backdrop-filter: blur(7.5px);
+    -webkit-backdrop-filter: blur(7.5px);
     border-radius: 10px;
-    border: 1px solid rgba( 255, 255, 255, 0.18 );
+    border: 1px solid rgba(255, 255, 255, 0.18);
     transition: all 0.1s linear;
 }
 
@@ -731,21 +770,24 @@ div.header-text {
     text-align: center;
     padding: 5px;
 }
+
 .food-menu-button a {
     border-radius: 20px;
-    background-color: rgb(224,107,5);
+    background-color: rgb(224, 107, 5);
     transition: all 0.2s ease-in;
 }
 
 .food-menu-button a:hover {
-    background: rgb(255,205,57);
+    background: rgb(255, 205, 57);
     scale: 1.05;
-    
+
 }
 
-.food-menu-desc .food-title, .food-menu-desc .food-detail, .food-menu-desc .food-price {
+.food-menu-desc .food-title,
+.food-menu-desc .food-detail,
+.food-menu-desc .food-price {
     font-size: 1.2rem;
-    color: rgb(224,107,5);
+    color: rgb(224, 107, 5);
     font-weight: bold;
 }
 
@@ -759,7 +801,7 @@ div.header-text {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: url(../images/frontend-bg/order-food.jpg);
+    background: url('../images/customer-bg/order-food.jpg');
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
@@ -783,7 +825,8 @@ div.header-text {
     gap: 50px;
 
 }
-.food-order-head{
+
+.food-order-head {
     width: 50%;
     height: 50%;
     display: flex;
@@ -808,8 +851,9 @@ div.header-text {
     line-height: 1.8;
 }
 
-.food-order-label .order-title, .food-order-label .order-price{
-    color: rgb(255,198,27);
+.food-order-label .order-title,
+.food-order-label .order-price {
+    color: rgb(255, 198, 27);
     font-weight: bold;
     font-size: 1.2rem;
 }
@@ -847,9 +891,9 @@ div.header-text {
     transition: all .2s linear;
 }
 
-.order-label input[type]:valid ~ label,
-.order-label input[type]:focus ~ label {
-    color: rgb(255,198,27);
+.order-label input[type]:valid~label,
+.order-label input[type]:focus~label {
+    color: rgb(255, 198, 27);
     transform: translateY(-13px);
     font-size: .9rem;
     font-weight: 700;
@@ -868,11 +912,11 @@ div.header-text {
     width: 100%;
     padding: 10px;
     border: 5px;
-    background-color: rgb(224,107,5); 
+    background-color: rgb(224, 107, 5);
 }
 
 .order-button button:hover {
-    background-color: rgb(255,198,27);
+    background-color: rgb(255, 198, 27);
     scale: 1.05;
 }
 
@@ -886,7 +930,7 @@ div.header-text {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background: url(../images/frontend-bg/food-summary.jpg);
+    background: url('../images/customer-bg/food-summary.jpg');
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
@@ -894,8 +938,9 @@ div.header-text {
 }
 
 .food-summary-container h1 {
-    color: rgb(255,198,27);
+    color: rgb(255, 198, 27);
 }
+
 .customer-summary {
     width: 50%;
     height: auto;
@@ -906,7 +951,7 @@ div.header-text {
 
 .customer-summary .title {
     font-weight: bold;
-    color: rgb(255,198,27);
+    color: rgb(255, 198, 27);
     font-size: 1.2rem;
 }
 
@@ -920,12 +965,14 @@ div.header-text {
 }
 
 
-.food-summary table, .food-summary th, .food-summary td  {
+.food-summary table,
+.food-summary th,
+.food-summary td {
     line-height: 3;
     border-bottom: 2px solid rgb(255, 255, 255);
     border-collapse: collapse;
     text-align: left;
-    
+
 }
 
 .food-summary table {
@@ -935,7 +982,7 @@ div.header-text {
 }
 
 .food-summary th {
-    color: rgb(255,198,27);
+    color: rgb(255, 198, 27);
 }
 
 .food-summary td {
@@ -947,7 +994,7 @@ div.header-text {
 }
 
 .food-summary span {
-    color: rgb(255,198,27);
+    color: rgb(255, 198, 27);
     font-weight: bold;
     font-size: 1.2rem;
 }
@@ -963,23 +1010,25 @@ div.contact {
     flex-direction: column;
     justify-content: center;
     align-items: flex-end;
-    background: url('../images/frontend-bg/contact-bg.jpg');
+    background: url('../images/customer-bg/contact-bg.jpg');
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
     background-attachment: scroll;
     transition: all 1s linear;
 }
+
 div.contact-header {
-   height: 100px; 
-   position: relative;
-   top: 170px;
-   right: 20px;
+    height: 100px;
+    position: relative;
+    top: 170px;
+    right: 20px;
 }
 
 div.contact-header p {
     color: rgb(255, 255, 255);
 }
+
 div.contact-container {
     width: 100%;
     height: 100%;
@@ -1012,7 +1061,7 @@ div.contact-wrapper {
     border: none;
     outline: none;
     cursor: pointer;
-    
+
 }
 
 .contact-textarea {
@@ -1025,7 +1074,8 @@ div.contact-wrapper {
     padding: 20px 12px;
     font-size: 1rem;
 }
-.contact-input input[type]{
+
+.contact-input input[type] {
     width: 100%;
     height: 55px;
     padding: 8px 12px 0;
@@ -1033,7 +1083,8 @@ div.contact-wrapper {
     border: 1px solid black;
 }
 
-.contact-input label, .contact-textarea label {
+.contact-input label,
+.contact-textarea label {
     position: absolute;
     top: 17px;
     left: 13px;
@@ -1043,12 +1094,12 @@ div.contact-wrapper {
     transition: all .2s linear;
 }
 
-.contact-input input[type]:read-only ~ label,
-.contact-input input[type]:focus ~ label,
-.contact-input input[type]:valid ~ label,
-.contact-textarea textarea:valid ~ label,
-.contact-textarea textarea:focus ~ label {
-    color: rgb(224,107,5);
+.contact-input input[type]:read-only~label,
+.contact-input input[type]:focus~label,
+.contact-input input[type]:valid~label,
+.contact-textarea textarea:valid~label,
+.contact-textarea textarea:focus~label {
+    color: rgb(224, 107, 5);
     transform: translateY(-13px);
     font-size: 0.9rem;
     font-weight: 700;
@@ -1067,15 +1118,15 @@ section.contact-button button[type="submit"] {
     outline: none;
     cursor: pointer;
     color: white;
-    background-color: rgb(224,107,5);
+    background-color: rgb(224, 107, 5);
     text-align: center;
     font-size: 1.05rem;
     transition: all 0.2s ease-in-out;
-    
+
 }
 
 section.contact-button button[type="submit"]:hover {
-    background: rgb(254,225,135);
+    background: rgb(254, 225, 135);
     scale: 1.02;
 
 }
@@ -1090,7 +1141,7 @@ div.contact-links {
     margin-right: 70px;
 }
 
-div.contact-links a{
+div.contact-links a {
     width: 60px;
     height: 60px;
     transition: scale 0.2s ease-in;
@@ -1116,12 +1167,14 @@ footer {
     position: fixed;
     bottom: 0;
     display: flex;
-    flex-direction: column;;
+    flex-direction: column;
+    ;
     justify-content: center;
     align-items: center;
     padding: 10px;
     background: rgb(0, 0, 0);
 }
+
 footer ul {
     list-style-type: none;
 }

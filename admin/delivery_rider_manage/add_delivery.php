@@ -103,13 +103,25 @@ if (filter_has_var(INPUT_POST, 'submit')) {
 
     if ($res) {
         //To show display messege once data has been inserted
-        $_SESSION['add'] = "<div id='message' class='success delivery-message'><img src='../../images/logo/successful.svg' alt='successful' class='successful'><span>Delivery Rider Added Successfully</span></div>";
+        $_SESSION['add'] = "
+            <div class='alert alert--success' id='alert'>
+                <div class='alert__message'>
+                    Delivery Rider Profile Created Successfully
+                </div>
+            </div>
+        ";
 
         //Redirecting page to delivery company manage.
         header("location:" . SITEURL . 'admin/delivery_rider_manage/delivery_manage.php');
     } else {
         //To show display messege once data has been inserted
-        $_SESSION['add'] = "<div id='message' class='fail delivery-message'><img src='../../images/logo/warning.svg' alt='warning' class='warning'><span>Failed to Add Delivery Rider</span></div>";
+        $_SESSION['add'] = "
+            <div class='alert alert--danger' id='alert'>
+				<div class='alert__message'>	
+					Failed to Create Delivery Rider Profile
+				</div>
+			</div>
+        ";
 
         //Redirecting page to delivery company manage.
         header("location:" . SITEURL .    'admin/delivery_rider_manage/delivery_manage.php');
