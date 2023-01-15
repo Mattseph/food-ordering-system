@@ -1,5 +1,5 @@
 <?php
-include '../front-partials/header.php';
+include '../customer-partials/header.php';
 
 if (isset($_GET['product_id']) && isset($_GET['quantity'])) {
     $product_id = (int) $_GET['product_id'];

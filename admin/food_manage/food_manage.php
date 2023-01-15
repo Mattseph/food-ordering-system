@@ -17,14 +17,14 @@ include '../partials/head.php';
 		unset($_SESSION['delete']);
 	}
 
-	if (isset($_SESSION['upload'])) {
-		echo $_SESSION['upload'];
-		unset($_SESSION['upload']);
+	if (isset($_SESSION['upload_photo_failed'])) {
+		echo $_SESSION['upload_photo_failed'];
+		unset($_SESSION['upload_photo_failed']);
 	}
 
-	if (isset($_SESSION['unauthorize'])) {
-		echo $_SESSION['unauthorize'];
-		unset($_SESSION['unauthorize']);
+	if (isset($_SESSION['remove_photo_failed'])) {
+		echo $_SESSION['remove_photo_failed'];
+		unset($_SESSION['remove_photo_failed']);
 	}
 
 	if (isset($_SESSION['update'])) {
@@ -32,9 +32,14 @@ include '../partials/head.php';
 		unset($_SESSION['update']);
 	}
 
-	if (isset($_SESSION['no_foodid_found'])) {
-		echo $_SESSION['no_foodid_found'];
-		unset($_SESSION['no_foodid_found']);
+	if (isset($_SESSION['no_food_id_found'])) {
+		echo $_SESSION['no_food_id_found'];
+		unset($_SESSION['no_food_id_found']);
+	}
+
+	if (isset($_SESSION['no_food_data_found'])) {
+		echo $_SESSION['no_food_data_found'];
+		unset($_SESSION['no_food_data_found']);
 	}
 	?>
 	<div class="wrapper">
@@ -55,7 +60,7 @@ include '../partials/head.php';
 			</tr>
 
 			<?php
-			$sql = "SELECT * from food_list";
+			$sql = "SELECT * from food_list ORDER BY food_id DESC";
 			$res = mysqli_query($conn, $sql);
 			$count = mysqli_num_rows($res);
 			$IDD = 1;

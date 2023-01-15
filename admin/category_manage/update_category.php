@@ -21,12 +21,15 @@ include '../partials/head.php';
 			$current_image = htmlspecialchars($row['image_name']);
 			$active = htmlspecialchars($row['active']);
 		} else {
-			$_SESSION['no_category_found'] = "<div id='message' class='fail category-message'><img src='../../images/logo/warning.svg' alt='warning' class='warning'><span>Category Not Found</span></div>";
+			$_SESSION['no_category_data_found'] = "
+				<div class='alert alert--danger' id='alert'>
+					<div class='alert__message'>	
+						Category Data Not Found
+					</div>
+				</div>
+			";
 			header('location:' . SITEURL . 'admin/category_manage/category_manage.php');
 		}
-	} else {
-		$_SESSION['no_category_found'] = "<div id='message' class='fail category-message'><img src='../../images/logo/warning.svg' alt='warning' class='warning'><span>Category ID not Found</span></div>";
-		header('location:' . SITEURL . 'admin/category_manage/category_manage.php');
 	}
 	?>
 
@@ -112,7 +115,13 @@ include '../partials/head.php';
 					$upload = move_uploaded_file($source_path, $destination_path);
 
 					if ($upload == false) {
-						$_SESSION['upload'] = "<div id='message' class='fail category-message'><img src='../../images/logo/warning.svg' alt='warning' class='warning'><span>Failed to Upload Image</span></div>";
+						$_SESSION['upload'] = "
+							<div class='alert alert--danger' id='alert'>
+								<div class='alert__message'>	
+									Failed to Upload Image
+								</div>
+							</div>
+						";
 						header('location:' . SITEURL . 'admin/category_manage/category_manage.php');
 						die();
 					}
@@ -122,7 +131,13 @@ include '../partials/head.php';
 						$remove = unlink($remove_path);
 
 						if ($remove == false) {
-							$_SEESION['remove_failed'] = "<div id='message' class='fail category-message'><img src='../../images/logo/warning.svg' alt='warning' class='warning'><span>Failed to Remove the Current Image</span></div>";
+							$_SEESION['remove_failed'] = "
+								<div class='alert alert--danger' id='alert'>
+									<div class='alert__message'>	
+										Failed to Remove the Current Image
+									</div>
+								</div>
+							";
 
 							header('location:' . SITEURL . 'admin/category_manage/category_manage.php');
 							die();
@@ -145,10 +160,22 @@ include '../partials/head.php';
 			$res2 = mysqli_query($conn, $sql2);
 
 			if ($res2) {
-				$_SESSION['update'] = "<div id='message' class='success category-message'><img src='../../images/logo/successful.svg' alt='successful' class='successful'><span>Category Updated Successfully</span></div>";
+				$_SESSION['update'] = "
+				<div class='alert alert--success' id='alert'>
+					<div class='alert__message'>
+						Category Update Successfully
+					</div>
+				</div>
+			";
 				header('location:' . SITEURL . 'admin/category_manage/category_manage.php');
 			} else {
-				$_SESSION['update'] = "<div id='message' class='fail category-message'><img src='../../images/logo/warning.svg' alt='warning' class='warning'><span>Failed to Update Category</span></div>";
+				$_SESSION['update'] = "
+					<div class='alert alert--danger' id='alert'>
+						<div class='alert__message'>	
+							Failed to Update Category
+						</div>
+					</div>
+				";
 
 				header('location:' . SITEURL . 'admin/category_manage/category_manage.php');
 			}

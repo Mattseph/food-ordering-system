@@ -33,19 +33,18 @@
                 $email = filter_var($clean_email, FILTER_SANITIZE_EMAIL);
                 $active = htmlspecialchars($row['active']);
             } else {
-                $_SESSION['no_riderid_found'] = "<div id='message' class='fail delivery-message'><img src='../../images/logo/warning.svg' alt='warning' class='warning'><span>Rider id not found</span></div>";
+                $_SESSION['no_rider_data_found'] = "
+                    <div class='alert alert--danger' id='alert'>
+                        <div class='alert__message'>	
+                            Delivery Rider Profile Data Not Found
+                        </div>
+                    </div>
+                ";
 
                 header('location:' . SITEURL . 'admin/delivery_rider_manage/delivery_manage.php');
             }
         }
-    } else {
-        $_SESSION['no_riderid_found'] = "<div id='message' class='fail delivery-message'><img src='../../images/logo/warning.svg' alt='warning' class='warning'><span>Rider id not found</span></div>";
-
-        header('location:' . SITEURL . 'admin/delivery_rider_manage/delivery_manage.php');
     }
-
-
-
     ?>
     <div class="row">
         <form action="" method="POST" enctype="multipart/form-data" class="crud">
@@ -128,11 +127,22 @@ if (filter_has_var(INPUT_POST, 'submit')) {
     $res2 = mysqli_query($conn, $sql2);
 
     if ($res2) {
-        $_SESSION['update'] = "<div id='message' class='success delivery-message'><img src='../../images/logo/successful.svg' alt='successful' class='successful'><span>Updated Successfully</span></div>";
-
+        $_SESSION['update'] = "
+            <div class='alert alert--success' id='alert'>
+                <div class='alert__message'>
+                    Delivery Rider Profile Updated Successfully
+                </div>
+            </div>
+        ";
         header('location:' . SITEURL . 'admin/delivery_rider_manage/delivery_manage.php');
     } else {
-        $_SESSION['update'] = "<div id='message' class='fail delivery-message'><img src='../../images/logo/warning.svg' alt='warning' class='warning'><span>Failed to Update</span></div>";
+        $_SESSION['update'] = "
+        <div class='alert alert--danger' id='alert'>
+            <div class='alert__message'>	
+                Failed to Update Delivery Rider Profile
+            </div>
+        </div>
+    ";
 
         header('location:' . SITEURL . 'admin/delivery_rider_manage/delivery_manage.php');
     }

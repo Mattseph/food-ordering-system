@@ -1,6 +1,6 @@
 <?php
 
-include '../../configuration/constants.php';
+include '../../configuration.php';
 
 if (filter_has_var(INPUT_GET, 'food_id') && filter_has_var(INPUT_GET, 'image_name')) {
 	$sanitize_id = filter_var($_GET['food_id'], FILTER_SANITIZE_NUMBER_INT);
@@ -13,21 +13,38 @@ if (filter_has_var(INPUT_GET, 'food_id') && filter_has_var(INPUT_GET, 'image_nam
 		$remove = unlink($path);
 	}
 
-	
+	mysqli_query($conn, "SET FOREIGN_KEY_CHECKS=0");
 	$sql = "DELETE FROM food_list WHERE food_id = $food_id";
 	$res = mysqli_query($conn, $sql);
 
 	if ($res) {
-		$_SESSION['delete'] = "<div id='message' class='success food-message'><img src='../../images/logo/successful.svg' alt='successful' class='successful'><span>Food Deleted Successfuly</span></div>";
-
+		$_SESSION['delete'] = "
+			<div class='alert alert--success' id='alert'>
+				<div class='alert__message'>
+					Food Deleted Successfully
+				</div>
+			</div>
+		";
 		header('location:' . SITEURL . 'admin/food_manage/food_manage.php');
 	} else {
-		$_SESSION['delete'] = "<div id='message' class='failed'><img src='../../images/logo/warning.svg' alt='warning' class='warning'><span>Failed to Delete Food</span></div>";
+		$_SESSION['delete'] = "
+			<div class='alert alert--danger' id='alert'>
+				<div class='alert__message'>	
+					Failed to Delete Food
+				</div>
+			</div>
+		";
 
 		header('location:' . SITEURL . 'admin/food_manage/food_manage.php');
 	}
 } else {
-	$_SESSION['unauthorize'] = "<div id='message' class='fail food-message'><img src='../../images/logo/warning.svg' alt='warning' class='warning'><span>Failed to Delete Food</span></div>";
+	$_SESSION['no_foodid_found'] = "
+		<div class='alert alert--danger' id='alert'>
+			<div class='alert__message'>	
+				Food Id Not Found
+			</div>
+		</div>
+	";
 
 	header('location:' . SITEURL . 'admin/food_manage/food_manage.php');
 }

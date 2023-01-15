@@ -23,9 +23,9 @@ include '../partials/head.php';
 		unset($_SESSION['delete']);
 	}
 
-	if (isset($_SESSION['no_category_found'])) {
-		echo $_SESSION['no_category_found'];
-		unset($_SESSION['no_category_found']);
+	if (isset($_SESSION['no_category_data_found'])) {
+		echo $_SESSION['no_category_data_found'];
+		unset($_SESSION['no_category_data_found']);
 	}
 
 	if (isset($_SESSION['update'])) {
@@ -63,7 +63,7 @@ include '../partials/head.php';
 			</tr>
 
 			<?php
-			$sql = "SELECT * from category_list";
+			$sql = "SELECT * from category_list ORDER BY category_id DESC";
 			$res = mysqli_query($conn, $sql);
 			$count = mysqli_num_rows($res);
 

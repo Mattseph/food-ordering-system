@@ -8,14 +8,14 @@
 		unset($_SESSION['update']);
 	}
 
-	if (isset($_SESSION['no_orderid_found'])) {
+	if (isset($_SESSION['no_order_id_found'])) {
 		echo $_SESSION['no_orderid_found'];
 		unset($_SESSION['no_orderid_found']);
 	}
 
 	?>
 	<div class="wrapper">
-		<h1>Order Management</h1>
+		<h1>Order Status Management</h1>
 		<!--Header-->
 		<table>
 			<tr>

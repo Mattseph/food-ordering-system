@@ -31,11 +31,24 @@ include '../partials/head.php';
 				$postal_code = htmlspecialchars($row['postal_code']);
 				$active = htmlspecialchars($row['active']);
 			} else {
+				$_SESSION['no_supplier_data_found'] = "
+					<div class='alert alert--danger' id='alert'>
+						<div class='alert__message'>	
+							Supplier Profile Data Not Found
+						</div>
+					</div>
+				";
 				header('location:' . SITEURL . 'admin/supplier_manage/supplier_manage.php');
 			}
 		}
 	} else {
-		$_SESSION['no_supplier_found'] = "<div id='message' class='fail supplier-message'><img src='../../images/logo/warning.svg' alt='warning' class='warning'><span>Supplier ID not Found</span></div>";
+		$_SESSION['no_supplier_id_found'] = "
+			<div class='alert alert--danger' id='alert'>
+				<div class='alert__message'>	
+					Supplier Id Not Found
+				</div>
+			</div>
+		";
 		header('location:' . SITEURL . 'admin/supplier_manage.php');
 	}
 
@@ -155,12 +168,23 @@ if (filter_has_var(INPUT_POST, 'submit')) {
 	$res = mysqli_query($conn, $sql);
 
 	if ($res) {
-		$_SESSION['update'] = "<div id='message' class='success supplier-message'><img src='../../images/logo/successful.svg' alt='successful' class='successful'><span>Supplier Updated Successfully</span></div>";
+		$_SESSION['update'] = "
+			<div class='alert alert--success' id='alert'>
+				<div class='alert__message'>
+					Supplier Profile Updated Successfully
+				</div>
+			</div>
+		";
 
 		header('location:' . SITEURL . 'admin/supplier_manage/supplier_manage.php');
 	} else {
-		$_SESSION['update'] = "<div id='message' class='fail supplier-message'><img src='../../images/logo/warning.svg' alt='warning' class='warning'><span>Failed to Update Supplier</span></div>";
-
+		$_SESSION['update'] = "
+			<div class='alert alert--danger' id='alert'>
+				<div class='alert__message'>	
+					Failed to Update Supplier Profile
+				</div>
+			</div>
+		";
 		header('location:' . SITEURL . 'admin/supplier_manage/supplier_manage.php');
 	}
 }

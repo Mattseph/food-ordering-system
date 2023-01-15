@@ -1,6 +1,6 @@
 <?php
 ob_start();
-include 'front-partials/header.php';
+include 'customer-partials/header.php';
 
 if (isset($_SESSION['user_id'])) {
     $user_id = $_SESSION['user_id'];
@@ -145,7 +145,7 @@ if (filter_has_var(INPUT_POST, 'submit')) {
         }
     } else {
         $_SESSION['signin-required'] = "<div id='message' class='fail contact-message'><img src='../images/logo/warning.svg' alt='warning' class='warning'><span>Sign in Required</span></div>";
-        header('location:' . SITEURL . 'frontend/signin.php');
+        header('location:' . SITEURL . 'customer/signin.php');
     }
 }
 ob_end_flush();

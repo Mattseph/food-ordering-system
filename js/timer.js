@@ -1,3 +1,3 @@
 setTimeout(function() {
-    document.getElementById("message").style.display = 'none';
+    document.getElementById("alert").style.display = 'none';
 }, 6000);

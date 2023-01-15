@@ -1,4 +1,4 @@
-<?php include 'front-partials/header.php'; ?>
+<?php include 'customer-partials/header.php'; ?>
 
 <?php
 if (isset($_GET['category_id'])) {
@@ -15,7 +15,7 @@ if (isset($_GET['category_id'])) {
 } else {
     //Category id doesn't match
     //Redirect to category page
-    header('location:' . SITEURL . 'frontend/categories.php');
+    header('location:' . SITEURL . 'customer/categories.php');
 }
 ?>
 <section class="food-wrapper">
@@ -58,7 +58,7 @@ if (isset($_GET['category_id'])) {
                             <p class="food-detail">Description: <span><?php echo $description; ?></span></p>
 
                             <div class="food-menu-button">
-                                <a href="<?php echo SITEURL; ?>frontend/order_details.php?food_id=<?php echo $food_id; ?>" class="btn btn-primary">Order Here</a>
+                                <a href="<?php echo SITEURL; ?>customer/order_details.php?food_id=<?php echo $food_id; ?>" class="btn btn-primary">Order Here</a>
                             </div>
                         </div>
                     </div>

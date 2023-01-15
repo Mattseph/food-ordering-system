@@ -20,12 +20,19 @@
 				$firstname = $row['firstname'];
 				$username = $row['username'];
 			} else {
-				$_SESSION['no_adminid_found'] = "<div id='message' class='fail category-message'><img src='../../images/logo/warning.svg' alt='warning' class='warning'><span>Admin id not Found</span></div>";
+				$_SESSION['no_admin_data_found'] = "
+					<div class='alert alert--danger' id='alert'>
+						<div class='alert__message'>	
+							Admin Profile Data Not Found
+						</div>
+					</div>
+				";
 
 				header('location:' . SITEURL . 'admin/admin_manage/admin_manage.php');
 			}
 		}
 	}
+
 
 	?>
 	<div class="row">
@@ -82,11 +89,23 @@ if (filter_has_var(INPUT_POST, 'submit')) {
 	$res = mysqli_query($conn, $sql);
 
 	if ($res) {
-		$_SESSION['update'] = "<div id='message' class='success admin-message'><img src='../../images/logo/successful.svg' alt='successful' class='successful'><span>Admin Updated Successfully</span></div>";
+		$_SESSION['update'] = "
+			<div class='alert alert--success' id='alert'>
+				<div class='alert__message'>
+					Admin Profile Updated Successfully
+				</div>
+			</div>
+		";
 
 		header('location:' . SITEURL . 'admin/admin_manage/admin_manage.php');
 	} else {
-		$_SESSION['update'] = "<div id='message' class='fail admin-message'><img src='../../images/logo/warning.svg' alt='warning' class='warning'><span>Failed to Update Admin</span></div>";
+		$_SESSION['update'] = "
+			<div class='alert alert--danger' id='alert'>
+                <div class='alert__message'>	
+                    Failed to Update Admin Profile
+                </div>
+			</div>
+		";
 
 		header('location:' . SITEURL . 'admin/admin_manage/admin_manage.php');
 	}

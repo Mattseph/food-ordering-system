@@ -1,6 +1,6 @@
 <?php
 
-include '../../configuration/constants.php';
+include '../../configuration.php';
 
 //Get the id to be deleted
 if (filter_has_var(INPUT_GET, 'admin_id')) {
@@ -15,12 +15,24 @@ if (filter_has_var(INPUT_GET, 'admin_id')) {
 
 	if ($res) {
 		//Creating SESSION variable to display message.
-		$_SESSION['delete'] = "<div id='message' class='success admin-message'><img src='../../images/logo/successful.svg' alt='successful' class='successful'><span>Admin Deleted Successfully</span></div>";
+		$_SESSION['delete'] = "
+			<div class='alert alert--success' id='alert'>
+				<div class='alert__message'>
+					Admin Profile Deleted Successfully
+				</div>
+			</div>
+		";
 		//Redirecting to the manage admin page.
 		header('location:' . SITEURL . 'admin/admin_manage/admin_manage.php');
 	} else {
 		//Creating SESSION variable to display message.
-		$_SESSION['delete'] = "<div id='message' class='fail admin-message'><img src='../../images/logo/warning.svg' alt='warning' class='warning'><span>Failed to delete admin, Please try again.</span></div>";
+		$_SESSION['delete'] = "
+			<div class='alert alert--danger' id='alert'>
+                <div class='alert__message'>	
+					Failed to Delete Admin Profile, Please try again
+                </div>
+			</div>
+		";
 		//Redirecting to the manage admin page.
 		header('location:' . SITEURL . 'admin/admin_manage/admin_manage.php');
 	}

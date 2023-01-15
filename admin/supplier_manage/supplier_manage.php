@@ -20,11 +20,15 @@
 			unset($_SESSION['update']);
 		}
 
-		if (isset($_SESSION['no_supplier_found'])) {
-			echo $_SESSION['no_supplier_found'];
-			unset($_SESSION['no_supplier_found']);
+		if (isset($_SESSION['no_supplier_id_found'])) {
+			echo $_SESSION['no_supplier_id_found'];
+			unset($_SESSION['no_supplier_id_found']);
 		}
 
+		if (isset($_SESSION['no_supplier_data_found'])) {
+			echo $_SESSION['no_supplier_data_found'];
+			unset($_SESSION['no_supplier_data_found']);
+		}
 		?>
 
 		<div>
@@ -49,7 +53,7 @@
 
 			<?php
 			//Selecting all from table admin.
-			$sql = "SELECT * from suppliers";
+			$sql = "SELECT * from suppliers ORDER BY supplier_id DESC";
 			//Executiong the query
 			$res = mysqli_query($conn, $sql);
 

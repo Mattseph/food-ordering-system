@@ -21,9 +21,23 @@ if (filter_has_var(INPUT_GET, 'food_id')) {
 		$available_quantity = $row2['available_quantity'];
 		$current_image = $row2['image_name'];
 		$active = $row2['active'];
+	} else {
+		$_SESSION['no_food_data_found'] = "
+			<div class='alert alert--danger' id='alert'>
+				<div class='alert__message'>	
+					Food Data Not Found
+				</div>
+			</div>
+		";
 	}
 } else {
-	$_SESSION['no_foodid_found'] = "<div id='message' class='fail food-message'><img src='../../images/logo/warning.svg' alt='warning' class='warning'><span>Food id not found</span></div>";
+	$_SESSION['no_food_id_found'] = "
+		<div class='alert alert--danger' id='alert'>
+			<div class='alert__message'>	
+				Food Id Not Found
+			</div>
+		</div>
+	";
 	header('location:' . SITEURL . 'admin/food_manage/food_manage.php');
 }
 ?>
@@ -209,7 +223,13 @@ if (filter_has_var(INPUT_GET, 'food_id')) {
 					$upload = move_uploaded_file($source_path, $destination_path);
 
 					if ($upload == false) {
-						$_SESSION['upload'] = "<div id='message' class='fail food-message'><img src='../../images/logo/warning.svg' alt='warning' class='warning'><span>Failed to Upload Image</span></div>";
+						$_SESSION['upload_photo_failed'] = "
+							<div class='alert alert--danger' id='alert'>
+								<div class='alert__message'>	
+									Failed to Upload Photo
+								</div>
+							</div>
+						";
 
 						header('location:' . SITEURL . 'admin/food_manage/food_manage.php');
 						die();
@@ -220,7 +240,13 @@ if (filter_has_var(INPUT_GET, 'food_id')) {
 						$remove = unlink($remove_path);
 
 						if ($remove == false) {
-							$_SEESION['remove_failed'] = "<div id='message' class='fail food-message'><img src='../../images/logo/warning.svg' alt='warning' class='warning'><span>Failed to Remove the Current Image</span></div>";
+							$_SEESION['remove_photo_failed'] = "
+								<div class='alert alert--danger' id='alert'>
+									<div class='alert__message'>	
+										Failed to Remove Current Image
+									</div>
+								</div>
+							";
 
 							header('location:' . SITEURL . 'admin/food_manage/food_manage.php');
 							die();
@@ -248,14 +274,27 @@ if (filter_has_var(INPUT_GET, 'food_id')) {
 			$res3 = mysqli_query($conn, $sql3);
 
 			if ($res3) {
-				$_SESSION['update'] = "<div id='message' class='success food-message'><img src='../../images/logo/successful.svg' alt='successful' class='successful'><span>Food Updated Successfully</span></div>";
+				$_SESSION['update'] = "
+				<div class='alert alert--success' id='alert'>
+					<div class='alert__message'>
+						Food Updated Successfully
+					</div>
+				</div>
+			";
 
 				header('location:' . SITEURL . 'admin/food_manage/food_manage.php');
 			} else {
-				$_SESSION['update'] = "<div id='message' class='fail food-message'><img src='../../images/logo/warning.svg' alt='warning' class='warning'><span>Failed to Update Food</span></div>";
+				$_SESSION['update'] = "
+					<div class='alert alert--danger' id='alert'>
+						<div class='alert__message'>	
+							Failed to Update Food
+						</div>
+					</div>
+				";
 
 				header('location:' . SITEURL . 'admin/food_manage/food_manage.php');
 			}
+			
 		}
 		ob_end_flush();
 		?>

@@ -101,11 +101,23 @@
 			$res = mysqli_query($conn, $sql);
 
 			if ($res) {
-				$_SESSION['add'] = "<div id='message' class='success category-message'><img src='../../images/logo/successful.svg' alt='successful' class='successful'><span>Category Added Successfully</span></div>";
+				$_SESSION['add'] = "
+					<div class='alert alert--success' id='alert'>
+						<div class='alert__message'>
+							Category Added Successfully
+						</div>
+					</div>
+				";
 
 				header('location:' . SITEURL . 'admin/category_manage/category_manage.php');
 			} else {
-				$_SESSION['add'] = "<div id='message' class='fail category-message'><img src='../../images/logo/warning.svg' alt='warning' class='warning'><span>Failed to Add Category</span></div>";
+				$_SESSION['add'] = "
+					<div class='alert alert--danger' id='alert'>
+						<div class='alert__message'>	
+							Failed to Add Category
+						</div>
+					</div>
+				";
 
 				header('location:' . SITEURL . 'admin/category_manage/add_category.php');
 			}

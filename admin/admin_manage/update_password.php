@@ -49,7 +49,7 @@
 if (filter_has_var(INPUT_POST, 'submit')) {
 	$clean_id = filter_var($_POST['admin_id'], FILTER_SANITIZE_NUMBER_INT);
 	$admin_id = filter_var($clean_id, FILTER_VALIDATE_INT);
-	
+
 	$currentpassword = htmlspecialchars(md5($_POST['currentpassword']));
 	$newpassword = htmlspecialchars(md5($_POST['newpassword']));
 	$confirmpassword = htmlspecialchars(md5($_POST['confirmpassword']));
@@ -72,22 +72,44 @@ if (filter_has_var(INPUT_POST, 'submit')) {
 				$res2 = mysqli_query($conn, $sql2);
 
 				if ($res2) {
-					$_SESSION['change_pass'] = "<div id='message' class='success admin-message'><img src='../../images/logo/successful.svg' alt='successful' class='successful'><span>Password Changed Successfully</span></div>";
+					$_SESSION['change_pass'] = "
+						<div class='alert alert--success' id='alert'>
+							<div class='alert__message'>
+								Password Successfully Changed
+							</div>
+						</div>
+					";
 
 					header('location:' . SITEURL . 'admin/admin_manage/admin_manage.php');
 				} else {
-					$_SESSION['change_pass'] = "<div id='message' class='fail admin-message'><img src='../../images/logo/warning.svg' alt='warning' class='warning'><span>Failed to Changed Password</span></div>";
+					$_SESSION['change_pass'] = "
+						<div class='alert alert--danger' id='alert'>
+							<div class='alert__message'>	
+								Failed To Change Password
+							</div>
+						</div>
+					";
 
 					header('location:' . SITEURL . 'admin/admin_manage/admin_manage.php');
 				}
 			} else {
-				$_SESSION['pass_not_match'] = "<div id='message' class='fail admin-message'><img src='../../images/logo/warning.svg' alt='warning' class='warning'><span>Password Did Not Match</span></div>";
-
+				$_SESSION['pass_not_match'] = "
+					<div class='alert alert--danger' id='alert'>
+						<div class='alert__message'>	
+							Password Did Not Match, Please Try Again
+						</div>
+					</div>
+				";
 				header('location:' . SITEURL . 'admin/admin_manage/admin_manage.php');
 			}
 		} else {
-			$_SESSION['user_not_found'] = "<div id='message' class='fail admin-message'><img src='../../images/logo/warning.svg' alt='warning' class='warning'><span>Invalid Current Password</span></div>";
-
+			$_SESSION['user_not_found'] = "
+				<div class='alert alert--danger' id='alert'>
+					<div class='alert__message'>	
+						Invalid Current Password
+					</div>
+				</div>
+			";
 			header('location:' . SITEURL . 'admin/admin_manage/admin_manage.php');
 		}
 	}
