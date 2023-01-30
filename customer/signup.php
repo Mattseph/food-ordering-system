@@ -16,7 +16,7 @@
 
     <main class="register-container">
         <div class="register-background">
-            <img src="../images/signin/signup.jpg" alt="Sign up Background ">
+            <img src="../images/signin/signup.png" alt="Sign up Background ">
         </div>
 
 
