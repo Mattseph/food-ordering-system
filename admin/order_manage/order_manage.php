@@ -24,9 +24,8 @@
 				<th>Firstname</th>
 				<th>Contact Number</th>
 				<th>Delivery Address </th>
-				<th>Postal Code</th>
 				<th>Rider ID</th>
-				<th>Food ID</th>
+				<th>Food Name</th>
 				<th>Quantity</th>
 				<th>Total</th>
 				<th>Mode of Payment</th>
@@ -50,13 +49,13 @@
 				if ($count > 0) {
 					//Using while loop to get all of the data from database.
 					//It will run as long as there are data in database.
+
 					while ($rows = mysqli_fetch_assoc($res)) {
 						$order_id = $rows['order_id'];
 						$lastname = $rows['customer_lastname'];
 						$firstname = $rows['customer_firstname'];
 						$contact_number = $rows['contact_number'];
 						$delivery_address = $rows['delivery_address'];
-						$postal_code = $rows['postalcode'];
 						$rider_id = $rows['rider_id'];
 						$food_id = $rows['food_id'];
 						$quantity = $rows['quantity'];
@@ -65,6 +64,10 @@
 						$order_date = $rows['order_date'];
 						$status = $rows['status'];
 
+						$sql2 = "SELECT food_name FROM food_list WHERE food_id = '$food_id'";
+						$res2 = mysqli_query($conn, $sql2);
+						$row2 = mysqli_fetch_assoc($res2);
+						$food_name = $row2['food_name'];
 
 						//Display the values in the table
 			?>
@@ -74,9 +77,8 @@
 							<td><?php echo $firstname; ?></td>
 							<td><?php echo $contact_number; ?></td>
 							<td><?php echo $delivery_address; ?></td>
-							<td><?php echo $postal_code; ?></td>
 							<td><?php echo $rider_id; ?></td>
-							<td><?php echo $food_id; ?></td>
+							<td><?php echo $food_name; ?></td>
 							<td><?php echo $quantity; ?></td>
 							<td><?php echo $total; ?></td>
 							<td><?php echo $mode_of_payment; ?></td>

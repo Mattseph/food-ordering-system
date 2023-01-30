@@ -47,54 +47,56 @@ if ($count === 1) {
     }
     ?>
     <div class="food-summary-container">
-        <div class="customer-summary">
-            <h1 style="text-align:center">Order Summary</h1>
-            <h1>Puchased By</h1>
-            <div><span class="title">Order ID: </span><span class="data"><?php echo $order_id; ?></span></div>
-            <div><span class="title">Buyer Name: </span><span class="data"><?php echo ucwords($customer_lastname . ', ' . $customer_firstname, ', ') ?></span></div>
-            <div><span class="title">Phone Number: </span><span class="data"><?php echo $customer_number; ?> </span></div>
-            <div><span class="title">Delivery Address: </span><span class="data"><?php echo $delivery_address; ?></span></div>
-            <div><span class="title">Mode of Payment: </span><span class="data"><?php echo $mode_of_payment; ?></span></div>
-            <div><span class="title">Order Date and Time: </span><span class="data"><?php echo $order_date; ?></span></div>
+        <div class="food-summary-wrapper">
+            <div class="customer-summary">
+                <h1 style="text-align:center">Order Summary</h1>
+                <h1>Puchased By</h1>
+                <div><span class="title">Order ID: </span><span class="data"><?php echo $order_id; ?></span></div>
+                <div><span class="title">Buyer Name: </span><span class="data"><?php echo ucwords($customer_lastname . ', ' . $customer_firstname, ', ') ?></span></div>
+                <div><span class="title">Phone Number: </span><span class="data"><?php echo $customer_number; ?> </span></div>
+                <div><span class="title">Delivery Address: </span><span class="data"><?php echo $delivery_address; ?></span></div>
+                <div><span class="title">Mode of Payment: </span><span class="data"><?php echo $mode_of_payment; ?></span></div>
+                <div><span class="title">Order Date and Time: </span><span class="data"><?php echo $order_date; ?></span></div>
 
-            <div><span class="title">Expected Delivery: </span><span class="data"><?php echo $expected_delivery; ?></span></div>
+                <div><span class="title">Expected Delivery: </span><span class="data"><?php echo $expected_delivery; ?></span></div>
 
-        </div>
-        <div class="food-summary">
-            <?php
-            $food_id = $_SESSION['food_id'];
+            </div>
+            <div class="food-summary">
+                <?php
+                $food_id = $_SESSION['food_id'];
 
-            $sql2 = "SELECT * FROM food_list WHERE food_id = '$food_id'";
-            $result2 = mysqli_query($conn, $sql2);
-            $count2 = mysqli_num_rows($result2);
+                $sql2 = "SELECT * FROM food_list WHERE food_id = '$food_id'";
+                $result2 = mysqli_query($conn, $sql2);
+                $count2 = mysqli_num_rows($result2);
 
-            if ($count2 === 1) {
-                $food = mysqli_fetch_assoc($result2);
+                if ($count2 === 1) {
+                    $food = mysqli_fetch_assoc($result2);
 
-                $food_name = $food['food_name'];
-                $food_price = $food['food_price'];
-            }
-            ?>
-            <h1>Ordered Food Details</h1>
-            <table>
-                <tr>
-                    <th>Food Name</th>
-                    <th>Price</th>
-                    <th>Quantity</th>
-                    <th>Subtotal</th>
-                </tr>
+                    $food_name = $food['food_name'];
+                    $food_price = $food['food_price'];
+                }
+                ?>
+                <h1>Ordered Food Details</h1>
+                <table>
+                    <tr>
+                        <th>Food Name</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Subtotal</th>
+                    </tr>
 
-                <tr>
-                    <td><?php echo $food_name; ?></td>
-                    <td>$<?php echo $food_price ?></td>
-                    <td><?php echo $quantity; ?></td>
-                    <td>$<?php echo $total; ?></td>
-                </tr>
-                <tr>
-                    <td colspan="4" class="total"><span>Order Total: </span>$<?php echo $total; ?></td>
-                </tr>
+                    <tr>
+                        <td><?php echo $food_name; ?></td>
+                        <td>$<?php echo $food_price ?></td>
+                        <td><?php echo $quantity; ?></td>
+                        <td>$<?php echo $total; ?></td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" class="total"><span>Order Total: </span>$<?php echo $total; ?></td>
+                    </tr>
 
-            </table>
+                </table>
+            </div>
         </div>
     </div>
 </body>

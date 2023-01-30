@@ -801,7 +801,6 @@ div.header-text {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: url('../images/customer-bg/order-food.jpg');
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
@@ -930,11 +929,28 @@ div.header-text {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background: url('../images/customer-bg/food-summary.jpg');
+    background: url('../images/customer-bg/order-summary.png');
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
+
+}
+
+.food-summary-wrapper {
+    width: 45%;
+    height: 90vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.6);
+    box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+    backdrop-filter: blur( 10px );
+    -webkit-backdrop-filter: blur( 10px );
+    border-radius: 10px;
+    border: 1px solid rgba( 255, 255, 255, 0.18 );
+
 }
 
 .food-summary-container h1 {
@@ -957,6 +973,7 @@ div.header-text {
 
 .customer-summary .data {
     color: rgb(255, 255, 255);
+    font-weight: bold;
 }
 
 .food-summary {
