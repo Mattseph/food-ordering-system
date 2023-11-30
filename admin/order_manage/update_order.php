@@ -6,25 +6,26 @@ include '../partials/head.php';
     <?php
     if (filter_has_var(INPUT_GET, 'order_id')) {
         $order_id = htmlspecialchars($_GET['order_id']);
-        $sql2 = "SELECT * FROM order_details WHERE order_id = '$order_id'";
 
-        $res2 = mysqli_query($conn, $sql2);
+        $orderQuery = "SELECT * FROM order_details WHERE order_id = :order_id";
+        $orderStatement = $pdo->prepare($orderQuery);
+        $orderStatement->bindParam(':order_id', $order_id);
 
-        if ($res2) {
-            $count2 = mysqli_num_rows($res2);
+        if ($orderStatement->execute()) {
+            $orderCount = $orderStatement->rowCount();
 
-            if ($count2 === 1) {
-                $row2 = mysqli_fetch_assoc($res2);
+            if ($orderCount === 1) {
+                $order = $orderStatement->fetch(PDO::FETCH_ASSOC);
 
-                $order_id = $row2['order_id'];
-                $customer_lastname = $row2['customer_lastname'];
-                $customer_firstname = $row2['customer_firstname'];
-                $delivery_address = $row2['delivery_address'];
-                $food_id = $row2['food_id'];
-                $quantity = $row2['quantity'];
-                $total = $row2['total'];
-                $mode_of_payment = $row2['mode_of_payment'];
-                $status = $row2['status'];
+                $order_id = $order['order_id'];
+                $customer_lastname = $order['customer_lastname'];
+                $customer_firstname = $order['customer_firstname'];
+                $delivery_address = $order['delivery_address'];
+                $food_id = $order['food_id'];
+                $quantity = $order['quantity'];
+                $total = $order['total'];
+                $mode_of_payment = $order['mode_of_payment'];
+                $status = $order['status'];
             }
         }
     } else {
@@ -141,20 +142,16 @@ include '../partials/head.php';
 
             $total = htmlspecialchars($_POST['total']);
 
-            $sql3 = "UPDATE order_details SET
-				    customer_lastname = '$lastname',
-					customer_firstname = '$firstname',
-					delivery_address = '$address',
-					food_id = $food_id,
-					quantity = $quantity,
-					total = $total,
-                    status = '$status'
-					WHERE order_id = '$order_id'
-				";
+            $updateorderQuery = "UPDATE order_details SET
+                    status = :status
+					WHERE order_id = :order_id
+			";
 
-            $res3 = mysqli_query($conn, $sql3);
+            $updateorderStatement = $pdo->prepare($updateorderQuery);
+            $updateorderStatement->bindParam(':order_id', $order_id);
+            $updateorderStatement->bindParam(':status', $status);
 
-            if ($res3) {
+            if ($updateorderStatement->execute()) {
                 $_SESSION['update'] = "
                     <div class='alert alert--success' id='alert'>
                         <div class='alert__message'>

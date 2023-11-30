@@ -1,5 +1,7 @@
 <?php
+session_start();
 include 'configuration.php';
+$user_id = $_SESSION['user_id'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -9,7 +11,7 @@ include 'configuration.php';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quick Bites</title>
     <link rel="stylesheet" href="css/main.css">
-    <link rel="icon" type="image/jpg" href="images/logo/logo.jpg">
+    <link rel="icon" type="image/png" href="images/logo/logo.png">
     <script src="js/timer.js" type="text/javascript"></script>
 </head>
 
@@ -38,7 +40,7 @@ include 'configuration.php';
                         <a href="<?php echo SITEURL; ?>customer/contact.php">Contact Us</a>
                     </li>
                     <?php
-                    if (isset($_SESSION['user_id'])) {
+                    if (isset($user_id)) {
                     ?>
                         <li><a href="<?php echo SITEURL; ?>customer/logout.php">Log out</a></li>
                     <?php
@@ -84,9 +86,9 @@ include 'configuration.php';
         ?>
         <div class="image-container">
             <div class="images">
-                <img src="images/customer-bg/landingpage1.jpg">
-                <img src="images/customer-bg/landingpage2.jpg">
-                <img src="images/customer-bg/landingpage3.jpg">
+                <img loading="lazy" src="images/customer-bg/landingpage1.jpg">
+                <img loading="lazy" src="images/customer-bg/landingpage2.jpg">
+                <img loading="lazy" src="images/customer-bg/landingpage3.jpg">
 
             </div>
         </div>
@@ -106,15 +108,18 @@ include 'configuration.php';
             <h2>Food Categories</h2>
             <section class="category-menu">
                 <?php
-                $sql = "SELECT * FROM category_list WHERE active = 'Yes' LIMIT 3";
-                $res = mysqli_query($conn, $sql);
-                $count = mysqli_num_rows($res);
+                $active = 'Yes';
+                $sql = "SELECT * FROM category_list WHERE active = :active LIMIT 3";
+                $statement = $pdo->prepare($sql);
+                $statement->bindParam(':active', $active);
+                $statement->execute();
+                $count = $statement->rowCount();
 
                 if ($count > 0) {
-                    while ($row = mysqli_fetch_assoc($res)) {
-                        $category_id = $row['category_id'];
-                        $category_name = $row['category_name'];
-                        $image_name = $row['image_name'];
+                    while ($category = $statement->fetch(PDO::FETCH_ASSOC)) {
+                        $category_id = $category['category_id'];
+                        $category_name = $category['category_name'];
+                        $image_name = $category['image_name'];
                 ?>
 
                         <a href="<?php echo SITEURL; ?>customer/category-foods.php?category_id=<?php echo $category_id; ?>">
@@ -154,21 +159,24 @@ include 'configuration.php';
             <section class="food-menu">
 
                 <?php
+                $active = "Yes";
                 //Display food that's active.
-                $sql = "SELECT * FROM food_list WHERE active = 'Yes'";
+                $sql = "SELECT * FROM food_list WHERE active = :active";
+                $statement = $pdo->prepare($sql);
+                $statement->bindParam(':active', $active);
                 //Execute the query above.
-                $res = mysqli_query($conn, $sql);
+                $statement->execute();
                 //Number of rows in the result set.
-                $count = mysqli_num_rows($res);
+                $count = $statement->rowCount();
 
                 if ($count > 0) {
                     //Get the Food Available in Database.
-                    while ($row = mysqli_fetch_assoc($res)) {
-                        $food_id = $row['food_id'];
-                        $food_name = $row['food_name'];
-                        $description = $row['description'];
-                        $food_price = $row['food_price'];
-                        $image_name = $row['image_name'];
+                    while ($food = $statement->fetch(PDO::FETCH_ASSOC)) {
+                        $food_id = $food['food_id'];
+                        $food_name = $food['food_name'];
+                        $description = $food['description'];
+                        $food_price = $food['food_price'];
+                        $image_name = $food['image_name'];
                 ?>
                         <div class="food-menu-box">
                             <div class="food-menu-img">
@@ -210,24 +218,24 @@ include 'configuration.php';
     <!-- Food Menu Section Ends Here -->
 
     <?php
-    ob_start();
+
 
     if (isset($_SESSION['user_id'])) {
         $user_id = $_SESSION['user_id'];
-        $sql1 = "SELECT * FROM users WHERE user_id = $user_id";
-
-        $res1 = mysqli_query($conn, $sql1);
-
-        $count1 = mysqli_num_rows($res1);
+        $sql1 = "SELECT * FROM users WHERE user_id = :user_id";
+        $statement = $pdo->prepare($sql1);
+        $statement->bindParam('user_id', $user_id);
+        $statement->execute();
+        $count1 = $statement->rowCount();
 
         if ($count1 === 1) {
-            $row1 = mysqli_fetch_assoc($res1);
+            $user = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-            $user_id = $row1['user_id'];
-            $user_lastname = $row1['user_lastname'];
-            $user_firstname = $row1['user_firstname'];
-            $user_email = $row1['user_email'];
-            $user_phonenumber = $row1['user_phonenumber'];
+            $user_id = $user['user_id'];
+            $user_lastname = $user['user_lastname'];
+            $user_firstname = $user['user_firstname'];
+            $user_email = $user['user_email'];
+            $user_phonenumber = $user['user_phonenumber'];
         }
     }
     ?>
@@ -324,7 +332,7 @@ include 'configuration.php';
         $id = filter_var($_POST['user_id'], FILTER_SANITIZE_NUMBER_INT);
         $user_id = filter_var($id, FILTER_VALIDATE_INT);
         $message = htmlspecialchars($_POST['message']);
-        $date_message = date("Y-m-d H-m-s");
+        $date_message = date("Y-m-d H-i-s");
 
         $sql = "INSERT INTO messages 
             (
@@ -334,14 +342,17 @@ include 'configuration.php';
             )
             VALUES
             (
-                $user_id,
-                '$message',
-                '$date_message'
+                :user_id,
+                :message,
+                :date_message
             )";
+        $statement = $pdo->prepare($sql);
 
-        $result = mysqli_query($conn, $sql);
+        $statement->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+        $statement->bindParam(':message', $message);
+        $statement->bindParam(':date_message', $date_message);
 
-        if ($result) {
+        if ($statement->execute()) {
             $_SESSION['contact'] = "
             <div class='alert alert--success' id='alert'>
                 <div class='alert__message'>
@@ -372,7 +383,6 @@ include 'configuration.php';
         header('location:' . SITEURL . 'customer/signin.php');
     }
 
-    ob_end_flush();
     ?>
     <!--Contact Us Section End-->
 </body>

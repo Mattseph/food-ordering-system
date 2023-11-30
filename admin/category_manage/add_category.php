@@ -32,6 +32,15 @@
 					<label for="image">Select Image: </label>
 					<input type="file" name="image" accept="image/*">
 				</div>
+				<small>
+					<?php
+					if (isset($_SESSION['error-extension'])) {
+						$error = $_SESSION['error-extension'];
+						unset($_SESSION['error-extension']);
+						echo $error;
+					}
+					?>
+				</small>
 			</div>
 
 			<div class="form-group">
@@ -56,31 +65,33 @@
 		<?php
 
 		if (filter_has_var(INPUT_POST, 'submit')) {
-			$category_name = htmlspecialchars(ucwords($_POST['categoryname']));
+			$category_name = htmlspecialchars(ucwords(trim($_POST['categoryname'])));
 
 			if (filter_has_var(INPUT_POST, 'active')) {
 				$active = htmlspecialchars($_POST['active']);
 			} else {
 				$active = "No";
 			}
+			
+			$image_name = $_FILES['image']['name'];
+			$temp_name = $_FILES['image']['tmp_name'];
 
+			$allowed_extension = ['jpg', 'png', 'png'];
+			$image_extension = strtolower(pathinfo($image_name, PATHINFO_EXTENSION));
 
-			if (isset($_FILES['image']['name'])) {
-				$image_name = $_FILES['image']['name'];
-				if ($image_name != "") {
+			if ($image_name) {
+			
 
-					$image_name_parts = explode('.', $image_name);
-					$ext = end($image_name_parts);
-					$image_name = "Category_Image_" . rand(000, 999) . '.' . $ext;
-					$source_path = $_FILES['image']['tmp_name'];
-					$destination_path = "../../images/category/" . $image_name;
-					$upload = move_uploaded_file($source_path, $destination_path);
+				if (!in_array($image_extension, $allowed_extension)) {
+					$_SESSION['error-extension'] = "Only jpg, jpeg and png image extension are allowed";
 
-					if ($upload == false) {
-						$_SESSION['upload'] = "<div id='message' class='fail category-message'><img src='../../images/logo/warning.svg' alt='warning' class='warning'><span>Failed to Upload Image</span></div>";
-						header('location:' . SITEURL . 'admin/category_manage/add_category.php');
-						die();
-					}
+					header('location:' . SITEURL . 'admin/category_manage/add_category.php');
+					exit();
+				} else {
+					$upload = $category_name . '.png';
+					$destination_path = "../../images/category/" . $upload;
+					move_uploaded_file($temp_name, $destination_path);
+					$image_url = $upload;
 				}
 			} else {
 				$image_name = "";
@@ -93,14 +104,17 @@
 				)
 				VALUES
 				(
-					'$category_name', 
-					'$image_name',
-					'$active'
+					:category_name, 
+					:image_name,
+					:active
 				)";
 
-			$res = mysqli_query($conn, $sql);
+			$statement = $pdo->prepare($sql);
+			$statement->bindParam(':category_name', $category_name);
+			$statement->bindParam(':image_name', $image_url);
+			$statement->bindParam(':active', $active);
 
-			if ($res) {
+			if ($statement->execute()) {
 				$_SESSION['add'] = "
 					<div class='alert alert--success' id='alert'>
 						<div class='alert__message'>

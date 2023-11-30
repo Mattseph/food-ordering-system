@@ -54,48 +54,48 @@
 			<?php
 			//Selecting all from table admin.
 			$sql = "SELECT * from suppliers ORDER BY supplier_id DESC";
-			//Executiong the query
-			$res = mysqli_query($conn, $sql);
 
-			if ($res) {	//Count rows
-				$count = mysqli_num_rows($res);
+			//Executiong the query
+			$statement = $pdo->query($sql);
+			$suppliers = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+			if ($suppliers) {
 				//Creating a variable and assign the value.
 				$ID = 1;
+				//Using while loop to get all of the data from database.
+				//It will run as long as there are data in database.
+				foreach ($suppliers as $supplier) {
+					$supplier_id = $supplier['supplier_id'];
+					$supplier_lastname = $supplier['supplier_lastname'];
+					$supplier_firstname = $supplier['supplier_firstname'];
+					$contact_number = $supplier['contact_number'];
+					$email = $supplier['email'];
+					$address = $supplier['address'];
+					$country = $supplier['country'];
+					$postal_code = $supplier['postal_code'];
+					$active = $supplier['active'];
 
-				if ($count > 0) {	//Using while loop to get all of the data from database.
-					//It will run as long as there are data in database.
-					while ($rows = mysqli_fetch_assoc($res)) {
-						$supplier_id = $rows['supplier_id'];
-						$supplier_lastname = $rows['supplier_lastname'];
-						$supplier_firstname = $rows['supplier_firstname'];
-						$contact_number = $rows['contact_number'];
-						$email = $rows['email'];
-						$address = $rows['address'];
-						$country = $rows['country'];
-						$postal_code = $rows['postal_code'];
-						$active = $rows['active'];
-
-						//Display the values in the table
+					//Display the values in the table
 			?>
-						<tr>
-							<td><?php echo $ID++; ?></td>
-							<td><?php echo $supplier_lastname; ?></td>
-							<td><?php echo $supplier_firstname; ?></td>
-							<td><?php echo $contact_number; ?></td>
-							<td><?php echo $email; ?></td>
-							<td><?php echo $address; ?></td>
-							<td><?php echo $country; ?></td>
-							<td><?php echo $postal_code; ?></td>
-							<td><?php echo $active; ?></td>
-							<td>
-								<a href="<?php echo SITEURL; ?>admin/supplier_manage/update_supplier.php?supplier_id=<?php echo $supplier_id; ?>" class="btn btn-second">Update</a>
-								<a href="<?php echo SITEURL; ?>admin/supplier_manage/delete_supplier.php?supplier_id=<?php echo $supplier_id; ?>" class="btn btn-third">Delete</a>
-							</td>
-						</tr>
+					<tr>
+						<td><?php echo $ID++; ?></td>
+						<td><?php echo $supplier_lastname; ?></td>
+						<td><?php echo $supplier_firstname; ?></td>
+						<td><?php echo $contact_number; ?></td>
+						<td><?php echo $email; ?></td>
+						<td><?php echo $address; ?></td>
+						<td><?php echo $country; ?></td>
+						<td><?php echo $postal_code; ?></td>
+						<td><?php echo $active; ?></td>
+						<td>
+							<a href="<?php echo SITEURL; ?>admin/supplier_manage/update_supplier.php?supplier_id=<?php echo $supplier_id; ?>" class="btn btn-second">Update</a>
+							<a href="<?php echo SITEURL; ?>admin/supplier_manage/delete_supplier.php?supplier_id=<?php echo $supplier_id; ?>" class="btn btn-third">Delete</a>
+						</td>
+					</tr>
 			<?php
-					}
 				}
 			}
+
 			?>
 		</table>
 	</div>

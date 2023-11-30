@@ -25,40 +25,41 @@ if (filter_has_var(INPUT_GET, 'food_id')) {
     $clean_id = sanitize_int($_GET['food_id']);
     $food_id = validate_int($clean_id);
 
-    $sql = "SELECT * FROM food_list WHERE food_id = '$food_id'";
+    $foodQuery = "SELECT * FROM food_list WHERE food_id = :food_id";
+    $foodStatement = $pdo->prepare($foodQuery);
+    $foodStatement->bindParam(':food_id', $food_id);
 
-    $res = mysqli_query($conn, $sql);
+    if ($foodStatement->execute()) {
+        $foodCount = $foodStatement->rowCount();
 
-    if ($res) {
-        $count = mysqli_num_rows($res);
+        if ($foodCount == 1) {
+            $food = $foodStatement->fetch(PDO::FETCH_ASSOC);
 
-        if ($count == 1) {
-            $row = mysqli_fetch_assoc($res);
-
-            $sanitize_id  = sanitize_int($row['food_id']);
+            $sanitize_id  = sanitize_int($food['food_id']);
             $food_id = validate_int($sanitize_id);
-            $food_name = validate_string($row['food_name']);
-            $food_price = $row['food_price'];
-            $image_name = validate_string($row['image_name']);
+            $food_name = validate_string($food['food_name']);
+            $food_price = $food['food_price'];
+            $image_name = validate_string($food['image_name']);
         }
     }
 } else {
     echo "<script>alert('NO ID FOUND')</script>";
 }
 
+$active = "Yes";
+$riderQuery = "SELECT * FROM delivery_rider WHERE active = :active";
+$riderStatement = $pdo->prepare($riderQuery);
+$riderStatement->bindParam(':active', $active);
 
-$sql3 = "SELECT * FROM delivery_rider WHERE active = 'YES'";
-$res3 = mysqli_query($conn, $sql3);
+if ($riderStatement->execute()) {
+    $riderCount = $riderStatement->rowCount();
 
-if ($res3) {
-    $count3 = mysqli_num_rows($res3);
+    if ($riderCount > 0) {
+        $rider = $riderStatement->fetch(PDO::FETCH_ASSOC);
 
-    if ($count3 > 0) {
-        $row = mysqli_fetch_assoc($res3);
-
-        $rider_id = $row['rider_id'];
-        $rider_lastname = $row['rider_lastname'];
-        $rider_firstname = $row['rider_firstname'];
+        $rider_id = $rider['rider_id'];
+        $rider_lastname = $rider['rider_lastname'];
+        $rider_firstname = $rider['rider_firstname'];
     }
 }
 
@@ -197,7 +198,7 @@ if (isset($_SESSION['user_id'])) {
 
         $status = validate_string("Ordered");
 
-        $sql2 = "INSERT INTO order_details
+        $insertorderQuery = "INSERT INTO order_details
                         (
                             order_id, 
                             customer_lastname,
@@ -216,25 +217,39 @@ if (isset($_SESSION['user_id'])) {
                         )
                         VALUES 
                         (
-                            '$order_id',
-                            '$customer_lastname', 
-                            '$customer_firstname',
-                            '$contact_number',
-                            '$address',
-                            '$postal_code',
-                            $rider_id,  
-                            $food_id, 
-                            $quantity, 
-                            $total, 
-                            '$mode_of_payment',
-                            '$order_date',
-                            '$expected_delivery',
-                            '$status'
+                            :order_id,
+                            :customer_lastname, 
+                            :customer_firstname,
+                            :contact_number,
+                            :address,
+                            :postal_code,
+                            :rider_id,  
+                            :food_id, 
+                            :quantity, 
+                            :total, 
+                            :mode_of_payment,
+                            :order_date,
+                            :expected_delivery,
+                            :status
                         )";
 
-        $res2 = mysqli_query($conn, $sql2);
+        $insertorderStatement = $pdo->prepare($insertorderQuery);
+        $insertorderStatement->bindParam(':order_id', $order_id);
+        $insertorderStatement->bindParam(':customer_lastname', $customer_lastname);
+        $insertorderStatement->bindParam(':customer_firstname', $customer_firstname);
+        $insertorderStatement->bindParam(':contact_number', $contact_number);
+        $insertorderStatement->bindParam(':address', $address);
+        $insertorderStatement->bindParam(':postal_code', $postal_code, PDO::PARAM_INT);
+        $insertorderStatement->bindParam(':rider_id', $rider_id, PDO::PARAM_INT);
+        $insertorderStatement->bindParam(':food_id', $food_id, PDO::PARAM_INT);
+        $insertorderStatement->bindParam(':quatity', $quatity, PDO::PARAM_INT);
+        $insertorderStatement->bindParam(':total', $total, PDO::PARAM_INT);
+        $insertorderStatement->bindParam(':mode_of_payment', $mode_of_payment);
+        $insertorderStatement->bindParam(':order_date', $order_date);
+        $insertorderStatement->bindParam(':expected_delivery', $expected_delivery);
+        $insertorderStatement->bindParam(':status', $status);
 
-        if ($res2) {
+        if ($insertorderStatement->execute()) {
             $_SESSION['order'] = "
                 <div class='alert alert--success' id='alert'>
                     <div class='alert__message'>
@@ -254,7 +269,7 @@ if (isset($_SESSION['user_id'])) {
                     </div>
                 </div>
             ";
-            header('location:' . SITEURL . 'customer/order_details.php');
+            header("location:" . SITEURL . "customer/order_details.php?food_id='$food_id'");
         }
     }
 } else {

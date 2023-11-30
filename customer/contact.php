@@ -4,20 +4,21 @@ include 'customer-partials/header.php';
 
 if (isset($_SESSION['user_id'])) {
     $user_id = $_SESSION['user_id'];
-    $sql1 = "SELECT * FROM users WHERE user_id = $user_id";
+    $userQuery = "SELECT * FROM users WHERE user_id = :user_id";
+    $userStatement = $pdo->prepare($userQuery);
+    $userStatement->bindParam(':user_id', $user_id);
+    $userStatement->execute();
 
-    $res1 = mysqli_query($conn, $sql1);
+    $userCount = $userStatement->rowCount();
 
-    $count1 = mysqli_num_rows($res1);
+    if ($userCount === 1) {
+        $user = $userStatement->fetch(PDO::FETCH_ASSOC);
 
-    if ($count1 === 1) {
-        $row1 = mysqli_fetch_assoc($res1);
-
-        $user_id = $row1['user_id'];
-        $user_lastname = $row1['user_lastname'];
-        $user_firstname = $row1['user_firstname'];
-        $user_email = $row1['user_email'];
-        $user_phonenumber = $row1['user_phonenumber'];
+        $user_id = $user['user_id'];
+        $user_lastname = $user['user_lastname'];
+        $user_firstname = $user['user_firstname'];
+        $user_email = $user['user_email'];
+        $user_phonenumber = $user['user_phonenumber'];
     }
 }
 ?>
@@ -114,12 +115,12 @@ if (isset($_SESSION['user_id'])) {
 if (filter_has_var(INPUT_POST, 'submit')) {
     if (isset($_SESSION['user_id'])) {
 
-        $id = filter_var($_POST['user_id'], FILTER_SANITIZE_NUMBER_INT);
-        $user_id = filter_var($id, FILTER_VALIDATE_INT);
+        $clean_id = filter_var($_POST['user_id'], FILTER_SANITIZE_NUMBER_INT);
+        $user_id = filter_var($clean_id, FILTER_VALIDATE_INT);
         $message = htmlspecialchars($_POST['message']);
         $date_message = date("Y-m-d H-m-s");
 
-        $sql = "INSERT INTO messages 
+        $messageQuery = "INSERT INTO messages 
         (
             user_id, 
             message,
@@ -127,14 +128,17 @@ if (filter_has_var(INPUT_POST, 'submit')) {
         )
         VALUES
         (
-            $user_id,
-            '$message',
-            '$date_message'
+            :user_id,
+            :message,
+            :date_message
         )";
 
-        $result = mysqli_query($conn, $sql);
+        $messageStatement = $pdo->prepare($messageQuery);
+        $messageStatement->bindParam(':user_id', $user_id);
+        $messageStatement->bindParam(':message', $message);
+        $messageStatement->bindParam(':date_message', $date_message);
 
-        if ($result) {
+        if ($messageStatement->execute()) {
             $_SESSION['contact'] = "<div id='message' class='success contact-message'><img src='images/logo/successful.svg' alt='successful' class='successful'><span>Message Sent Successfully</span></div>";
 
             header('location:' . SITEURL);

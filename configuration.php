@@ -1,14 +1,19 @@
-<?php
-session_start();
 
+<?php
 date_default_timezone_set('Asia/Manila');
 
 define('SITEURL', 'http://localhost/FoodSystem/');
-define('LOCALHOST', 'localhost');
-define('DB_USERNAME', 'root');
-define('DB_PASSWORD', '');
-define('DB_NAME', 'food_ordering');
+$localhost = 'localhost:3308';
+$db_name = 'food_ordering';
+$username = 'root';
+$password = 'Bilaosrrmmmjg02311';
 
 
-$conn = mysqli_connect(LOCALHOST, DB_USERNAME, DB_PASSWORD) or die();
-$db_select = mysqli_select_db($conn, DB_NAME) or die();
+$dsn = "mysql:host=$localhost;dbname=$db_name;charset=UTF8;";
+
+try {
+    $pdo = new PDO($dsn, $username, $password);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    echo $e->getMessage();
+}

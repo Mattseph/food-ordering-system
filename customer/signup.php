@@ -27,6 +27,9 @@
             echo $_SESSION['add'];
             unset($_SESSION['add']);
         }
+
+        // $input = [];
+        // $error = [];
         ?>
 
         <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST" class="register">
@@ -45,6 +48,14 @@
                         <label for="firstname">Firstname</label>
                     </div>
                 </section>
+
+                <!-- <section class="register-input">
+                    <div class="placeholder">
+                        <input type="text" name="username" id="username" pattern="[A-Za-z0-9!@#$%^&*()_+=-?/ ]{5,}" value="<?php echo $input['username'] ?? ' ' ?>" class="<?php echo isset($error['username']) ? 'error' : ' ' ?>">
+                        <label for="username">Username</label>
+                    </div>
+                    <div><?php echo $error['username'] ?? ' ' ?></div>
+                </section> -->
 
                 <section class="register-input">
                     <div class="placeholder">
@@ -91,18 +102,31 @@
     </main>
 
     <?php
+    // const username_error = "Please Enter Your Email";
+    // $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_SPECIAL_CHARS);
+    // $input['username'] = $username;
+
+    // if ($username) {
+    //     $username = trim($username);
+    //     if ($username === ' ') {
+    //         $error['username'] = username_error;
+    //     }
+    // }
+
     if (filter_has_var(INPUT_POST, 'submit')) {
-        $firstname = htmlspecialchars(ucwords($_POST['firstname']));
         $lastname = htmlspecialchars(ucwords($_POST['lastname']));
+        $firstname = htmlspecialchars(ucwords($_POST['firstname']));
         $username = htmlspecialchars($_POST['username']);
 
         $clean_email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
-        $valid_email = filter_var($clean_email, FILTER_VALIDATE_EMAIL);
+        $email = filter_var($clean_email, FILTER_VALIDATE_EMAIL);
 
-        $contactnumber = htmlspecialchars($_POST['contactnumber']);
+        $contactno = htmlspecialchars($_POST['contactnumber']);
 
         $password1 = htmlspecialchars(md5($_POST['password1']));
         $password2 = htmlspecialchars(md5($_POST['password2']));
+
+        $role = htmlspecialchars('Customer');
 
         if ($password1 === $password2) {
             $sql = "INSERT INTO users 
@@ -112,21 +136,31 @@
                     user_username, 
                     user_password, 
                     user_email, 
-                    user_phonenumber
+                    user_phonenumber,
+                    user_role
                 ) 
                 VALUES 
                 (
-                    '$lastname',
-                    '$firstname',
-                    '$username',
-                    '$password1',
-                    '$valid_email',
-                    '$contactnumber'
+                    :lastname,
+                    :firstname,
+                    :username,
+                    :user_password,
+                    :email,
+                    :contactno,
+                    :role
                 )";
 
-            $res = mysqli_query($conn, $sql);
+            $statement = $pdo->prepare($sql);
+            $statement->bindParam(':lastname', $lastname);
+            $statement->bindParam(':firstname', $firstname);
+            $statement->bindParam(':username', $username);
+            $statement->bindParam(':user_password', $password1);
+            $statement->bindParam(':email', $email);
+            $statement->bindParam(':contactno', $contactno);
+            $statement->bindParam(':role', $role);
 
-            if ($res) {
+
+            if ($statement->execute()) {
                 $_SESSION['add'] = "
                     <div class='alert alert--success' id='alert'>
                         <div class='alert__message'>

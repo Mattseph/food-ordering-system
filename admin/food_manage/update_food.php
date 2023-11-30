@@ -5,22 +5,24 @@ include '../partials/head.php';
 if (filter_has_var(INPUT_GET, 'food_id')) {
 	$clean_id = filter_var($_GET['food_id'], FILTER_SANITIZE_NUMBER_INT);
 	$food_id = filter_var($clean_id, FILTER_VALIDATE_INT);
-	$sql2 = "SELECT * FROM food_list WHERE food_id = '$food_id'";
 
-	$res2 = mysqli_query($conn, $sql2);
+	$foodQuery = "SELECT * FROM food_list WHERE food_id = :food_id";
+	$foodStatement = $pdo->prepare($foodQuery);
+	$foodStatement->bindParam(':food_id', $food_id);
 
-	$count2 = mysqli_num_rows($res2);
-	if ($count2 === 1) {
-		$row2 = mysqli_fetch_assoc($res2);
+	$foodCount = $foodStatement->rowCount();
+	
+	if ($foodCount === 1) {
+		$food = $foodStatement->fetch(PDO::FETCH_ASSOC);
 
-		$current_category = $row2['category_id'];
-		$current_supplier = $row2['supplier_id'];
-		$food_name = $row2['food_name'];
-		$description = $row2['description'];
-		$price = $row2['food_price'];
-		$available_quantity = $row2['available_quantity'];
-		$current_image = $row2['image_name'];
-		$active = $row2['active'];
+		$current_category = $food['category_id'];
+		$current_supplier = $food['supplier_id'];
+		$food_name = $food['food_name'];
+		$description = $food['description'];
+		$price = $food['food_price'];
+		$available_quantity = $food['available_quantity'];
+		$current_image = $food['image_name'];
+		$active = $food['active'];
 	} else {
 		$_SESSION['no_food_data_found'] = "
 			<div class='alert alert--danger' id='alert'>
@@ -101,20 +103,32 @@ if (filter_has_var(INPUT_GET, 'food_id')) {
 					<label for="image">New Image: </label>
 					<input type="file" name="image" width="200px" height="175px" style=border-radius:15px>
 				</div>
+				<small>
+					<?php
+					if (isset($_SESSION['error-extension'])) {
+						$error = $_SESSION['error-extension'];
+						unset($_SESSION['error-extension']);
+						echo $error;
+					}
+					?>
+				</small>
 			</div>
 
 			<div class="form-group">
 				<div class="placeholder">
 					<select name="category" required>
 						<?php
-						$sql = "SELECT * FROM category_list WHERE active = 'Yes'";
-						$res = mysqli_query($conn, $sql);
-						$count = mysqli_num_rows($res);
+						$categoryQuery = "SELECT * FROM category_list WHERE active = :active";
+						$categoryStatement = $pdo->prepare($categoryQuery);
+						$categoryStatement->bindValue(':active', 'Yes');
+						$categoryStatement->execute();
 
-						if ($count > 0) {
-							while ($row = mysqli_fetch_assoc($res)) {
-								$category_id = $row['category_id'];
-								$category_name = $row['category_name'];
+						$categoryCount = $categoryStatement->rowCount();
+
+						if ($categoryCount > 0) {
+							while ($category = $categoryStatement->fetch(PDO::FETCH_ASSOC)) {
+								$category_id = $category['category_id'];
+								$category_name = $category['category_name'];
 
 						?>
 								<option <?php if ($current_category === $category_id) {
@@ -137,15 +151,18 @@ if (filter_has_var(INPUT_GET, 'food_id')) {
 				<div class="placeholder">
 					<select name="supplier" required>
 						<?php
-						$sql4 = "SELECT * FROM suppliers WHERE active='YES'";
-						$res4 = mysqli_query($conn, $sql4);
-						$count4 = mysqli_num_rows($res4);
+						$active = 'Yes';
+						$supplierQuery = "SELECT * FROM suppliers WHERE active = :active";
+						$supplierStatement = $pdo->prepare($supplierQuery);
+						$supplierStatement->bindParam(':active', $active);
+						$supplierStatement->execute();
+						$supplierCount = $supplierStatement->rowCount();
 
-						if ($count4 > 0) {
-							while ($row4 = mysqli_fetch_assoc($res4)) {
-								$supplier_id = $row4['supplier_id'];
-								$supplier_lastname = $row4['supplier_lastname'];
-								$supplier_firstname = $row4['supplier_firstname'];
+						if ($supplierCount > 0) {
+							while ($supplier = $supplierStatement->fetch(PDO::FETCH_ASSOC)) {
+								$supplier_id = $supplier['supplier_id'];
+								$supplier_lastname = $supplier['supplier_lastname'];
+								$supplier_firstname = $supplier['supplier_firstname'];
 
 						?>
 								<option <?php if ($current_supplier === $supplier_id) {
@@ -202,7 +219,7 @@ if (filter_has_var(INPUT_GET, 'food_id')) {
 			$supplier_id = filter_var($clean_supp_id, FILTER_VALIDATE_INT);
 
 			$food_name = htmlspecialchars(ucwords($_POST['foodname']));
-			$desc = htmlspecialchars($_POST['description']);
+			$description = htmlspecialchars($_POST['description']);
 
 			$food_price = htmlspecialchars($_POST['price']);
 			$available_quantity = htmlspecialchars($_POST['available_quantity']);
@@ -211,69 +228,64 @@ if (filter_has_var(INPUT_GET, 'food_id')) {
 			$active = htmlspecialchars($_POST['active']);
 
 
-			if (isset($_FILES['image']['name'])) {
-				$image_name = $_FILES['image']['name'];
+			$new_image_uploaded = false;
 
-				if ($image_name != "") {
-					$image_name_parts = explode('.', $image_name);
-					$ext = end($image_name_parts);
-					$image_name = "Food_Name_" . rand(000, 999) . '.' . $ext;
-					$source_path = $_FILES['image']['tmp_name'];
-					$destination_path = "../../images/food/" . $image_name;
-					$upload = move_uploaded_file($source_path, $destination_path);
+			// Get the old file path
+			$old_image_path = "../../images/food/" . $current_image;
+			$image_name = $_FILES['image']['name'];
+			$temp_name = $_FILES['image']['tmp_name'];
 
-					if ($upload == false) {
-						$_SESSION['upload_photo_failed'] = "
-							<div class='alert alert--danger' id='alert'>
-								<div class='alert__message'>	
-									Failed to Upload Photo
-								</div>
-							</div>
-						";
+			$image_extension = strtolower(pathinfo($image_name, PATHINFO_EXTENSION));
+			$allowed_extension = ['jpg', 'jpeg', 'png'];
 
-						header('location:' . SITEURL . 'admin/food_manage/food_manage.php');
-						die();
-					}
-					if ($current_image != "") {
-						$remove_path = "../../images/food/" . $current_image;
+			if ($image_name) {
 
-						$remove = unlink($remove_path);
-
-						if ($remove == false) {
-							$_SEESION['remove_photo_failed'] = "
-								<div class='alert alert--danger' id='alert'>
-									<div class='alert__message'>	
-										Failed to Remove Current Image
-									</div>
-								</div>
-							";
-
-							header('location:' . SITEURL . 'admin/food_manage/food_manage.php');
-							die();
-						}
-					}
+				if (!in_array($image_extension, $allowed_extension)) {
+					$_SESSION['error-extension'] = "Only jpg, jpeg and png image extension are allowed";
+					header("location: update_food.php?food_id='$food_id'");
+					exit();
 				} else {
-					$image_name = $current_image;
+					$upload_name = $food_name . '.png';
+					$destination_path = '../../images/food/' . $upload_name;
+					move_uploaded_file($temp_name, $destination_path);
+					$image_url = $upload_name;
+					$new_image_uploaded = true;
 				}
 			} else {
-				$image_name = $current_image;
+				$renaned_image_name = $food_name . '.png';
+				$new_image_path = "../../images/food/" . $renaned_image_name;
+				rename($old_image_path, $new_image_path);
+				$image_url = $new_image_path;
 			}
 
-			$sql3 = "UPDATE food_list SET
-				category_id = $category_id,
-				supplier_id = $supplier_id,
-				food_name = '$food_name',
-				description = '$desc',
-				food_price = '$food_price',
-				available_quantity = '$available_quantity',
-				image_name = '$image_name',
-				active = '$active'
-				WHERE food_id = $food_id
+			if ($new_image_uploaded && $food_name !== $old_food_name) {
+				unlink($old_image_path);
+			}
+
+			$updatefoodQuery = "UPDATE food_list SET
+				category_id = :category_id,
+				supplier_id = :supplier_id,
+				food_name = :food_name,
+				description = :description,
+				food_price = :food_price,
+				available_quantity = :available_quantity,
+				image_name = :image_name,
+				active = :active
+				WHERE food_id = :food_id
 			";
 
-			$res3 = mysqli_query($conn, $sql3);
+			$updatefoodStatement = $db->prepare($updatefoodQuery);
+			$updatefoodStatement->bindParam(':food_id', $food_id, PDO::PARAM_INT);
+			$updatefoodStatement->bindParam(':category_id', $category_id, PDO::PARAM_INT);
+			$updatefoodStatement->bindParam(':supplier_id', $supplier_id, PDO::PARAM_INT);
+			$updatefoodStatement->bindParam(':food_name', $food_name);
+			$updatefoodStatement->bindParam(':description', $description);
+			$updatefoodStatement->bindParam(':food_price', $food_price);
+			$updatefoodStatement->bindParam(':available_quantity', $available_quantity);
+			$updatefoodStatement->bindParam(':image_name', $image_name);
+			$updatefoodStatement->bindParam(':active', $active);
 
-			if ($res3) {
+			if ($updatefoodStatement->execute()) {
 				$_SESSION['update'] = "
 				<div class='alert alert--success' id='alert'>
 					<div class='alert__message'>
@@ -294,7 +306,6 @@ if (filter_has_var(INPUT_GET, 'food_id')) {
 
 				header('location:' . SITEURL . 'admin/food_manage/food_manage.php');
 			}
-			
 		}
 		ob_end_flush();
 		?>

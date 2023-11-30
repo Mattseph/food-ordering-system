@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 include '../../configuration.php';
 
 if (filter_has_var(INPUT_GET, 'food_id') && filter_has_var(INPUT_GET, 'image_name')) {
@@ -13,11 +13,14 @@ if (filter_has_var(INPUT_GET, 'food_id') && filter_has_var(INPUT_GET, 'image_nam
 		$remove = unlink($path);
 	}
 
-	mysqli_query($conn, "SET FOREIGN_KEY_CHECKS=0");
-	$sql = "DELETE FROM food_list WHERE food_id = $food_id";
-	$res = mysqli_query($conn, $sql);
+	$foreignQuery = "SET FOREIGN_KEY_CHECKS=0";
+	$pdo->query($foreignQuery);
 
-	if ($res) {
+	$deletefoodQuery = "DELETE FROM food_list WHERE food_id = :food_id";
+	$deletefoodStatement = $pdo->prepare($deletefoodQuery);
+	$deletefoodStatement->bindParam(':food_id', $food_id);
+
+	if ($deletefoodStatement->execute()) {
 		$_SESSION['delete'] = "
 			<div class='alert alert--success' id='alert'>
 				<div class='alert__message'>

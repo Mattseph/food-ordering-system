@@ -1,5 +1,6 @@
 <?php
-include '../configuration.php';
+session_start();
+include __DIR__ . '/../../configuration.php';
 ?>
 
 <!DOCTYPE html>
@@ -10,7 +11,7 @@ include '../configuration.php';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quick Bites</title>
     <link rel="stylesheet" href="../css/main.css">
-    <link rel="icon" type="image/jpg" href="../images/logo/logo.jpg">
+    <link rel="icon" type="image/png" href="../images/logo/logo.png">
     <script src="../js/timer.js" type="text/javascript"></script>
 </head>
 

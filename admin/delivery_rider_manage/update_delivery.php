@@ -8,30 +8,30 @@
         $clean_rider_id = filter_var($_GET['rider_id'], FILTER_SANITIZE_NUMBER_INT);
         $rider_id = filter_var($clean_rider_id, FILTER_VALIDATE_INT);
         //Create a query that select all from delivery company table where the passed company name is the same as the company name value in databse.
-        $sql = "SELECT * FROM delivery_rider WHERE rider_id = '$rider_id'";
-        //Execute the query above.
-        $res = mysqli_query($conn, $sql);
+        $riderQuery = "SELECT * FROM delivery_rider WHERE rider_id = :rider_id";
+        $riderStatement = $pdo->prepare($riderQuery);
+        $riderStatement->bindParam(':rider_id', $rider_id, PDO::PARAM_INT);
 
-        //Check whether the query is executed or not.
-        if ($res) {
-            $count = mysqli_num_rows($res);
+        //Execute the query above and check whether the query is executed or not.
+        if ($riderStatement->execute()) {
+            $riderCount = $riderStatement->rowCount();
 
-            if ($count == 1) {
-                $row = mysqli_fetch_assoc($res);
+            if ($riderCount === 1) {
+                $rider = $riderStatement->fetch(PDO::FETCH_ASSOC);
 
-                $clean_rider_id = filter_var($row['rider_id'], FILTER_SANITIZE_NUMBER_INT);
+                $clean_rider_id = filter_var($rider['rider_id'], FILTER_SANITIZE_NUMBER_INT);
                 $rider_id = filter_var($clean_rider_id, FILTER_VALIDATE_INT);
 
-                $rider_lastname = htmlspecialchars($row['rider_lastname']);
+                $rider_lastname = htmlspecialchars($rider['rider_lastname']);
 
-                $rider_firstname = htmlspecialchars($row['rider_firstname']);
+                $rider_firstname = htmlspecialchars($rider['rider_firstname']);
 
-                $clean_contact = filter_var($row['contact_number'], FILTER_SANITIZE_NUMBER_INT);
-                $contactnumber = filter_var($clean_contact, FILTER_VALIDATE_INT);
+                $contactnumber = htmlspecialchars($rider['contact_number']);
 
-                $clean_email = filter_var($row['email'], FILTER_SANITIZE_EMAIL);
+
+                $clean_email = filter_var($rider['email'], FILTER_SANITIZE_EMAIL);
                 $email = filter_var($clean_email, FILTER_SANITIZE_EMAIL);
-                $active = htmlspecialchars($row['active']);
+                $active = htmlspecialchars($rider['active']);
             } else {
                 $_SESSION['no_rider_data_found'] = "
                     <div class='alert alert--danger' id='alert'>
@@ -108,6 +108,8 @@
 
 <?php
 if (filter_has_var(INPUT_POST, 'submit')) {
+    $clean_id = filter_var($_POST['rider_id'], FILTER_SANITIZE_NUMBER_INT);
+    $rider_id = filter_var($clean_id, FILTER_VALIDATE_INT);
     $rider_lastname = htmlspecialchars(ucwords($_POST['lastname']));
     $rider_firstname = htmlspecialchars(ucwords($_POST['firstname']));
     $contact_number = htmlspecialchars($_POST['contactnumber']);
@@ -115,18 +117,24 @@ if (filter_has_var(INPUT_POST, 'submit')) {
     $email = filter_var($clean_email, FILTER_SANITIZE_EMAIL);
     $active = htmlspecialchars($_POST['active']);
 
-    $sql2 = "UPDATE delivery_rider SET
-		rider_lastname = '$rider_lastname',
-		rider_firstname = '$rider_firstname',
-		contact_number = '$contact_number',
-		email = '$email',
-        active = '$active'
-		WHERE rider_id = $rider_id
+    $updateriderQuery = "UPDATE delivery_rider SET
+		rider_lastname = :rider_lastname,
+		rider_firstname = :rider_firstname,
+		contact_number = :contact_number,
+		email = :email,
+        active = :active
+		WHERE rider_id = :rider_id
 	";
 
-    $res2 = mysqli_query($conn, $sql2);
+    $updateriderStatement = $pdo->prepare($updateriderQuery);
+    $updateriderStatement->bindParam(':rider_id', $rider_id);
+    $updateriderStatement->bindParam(':rider_lastname', $rider_lastname);
+    $updateriderStatement->bindParam(':rider_firstname', $rider_firstname);
+    $updateriderStatement->bindParam(':contact_number', $contact_number, PDO::PARAM_INT);
+    $updateriderStatement->bindParam(':email', $email);
+    $updateriderStatement->bindParam(':active', $active);
 
-    if ($res2) {
+    if ($updateriderStatement->execute()) {
         $_SESSION['update'] = "
             <div class='alert alert--success' id='alert'>
                 <div class='alert__message'>

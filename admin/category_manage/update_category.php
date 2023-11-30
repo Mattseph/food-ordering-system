@@ -5,21 +5,24 @@ include '../partials/head.php';
 <div class="form">
 
 	<?php
+	ob_start();
 	if (filter_has_var(INPUT_GET, 'category_id')) {
 		$clean_categoryid = filter_var($_GET['category_id'], FILTER_SANITIZE_NUMBER_INT);
 		$category_id = filter_var($clean_categoryid, FILTER_VALIDATE_INT);
 
-		$sql = "SELECT * FROM category_list WHERE category_id = $category_id";
+		$categoryQuery = "SELECT * FROM category_list WHERE category_id = :category_id";
+		$categoryStatement = $pdo->prepare($categoryQuery);
+		$categoryStatement->bindParam(':category_id', $category_id, PDO::PARAM_INT);
+		$categoryStatement->execute();
 
-		$res = mysqli_query($conn, $sql);
-		$count = mysqli_num_rows($res);
+		$categoryCount = $categoryStatement->rowCount();
 
-		if ($count === 1) {
-			$row = mysqli_fetch_assoc($res);
+		if ($categoryCount === 1) {
+			$category = $categoryStatement->fetch(PDO::FETCH_ASSOC);
 
-			$category_name = htmlspecialchars($row['category_name']);
-			$current_image = htmlspecialchars($row['image_name']);
-			$active = htmlspecialchars($row['active']);
+			$category_name = htmlspecialchars($category['category_name']);
+			$current_image = htmlspecialchars($category['image_name']);
+			$active = htmlspecialchars($category['active']);
 		} else {
 			$_SESSION['no_category_data_found'] = "
 				<div class='alert alert--danger' id='alert'>
@@ -36,7 +39,13 @@ include '../partials/head.php';
 	<div class="row">
 		<form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="POST" enctype="multipart/form-data" class="crud">
 			<h2>Update Category</h2>
-
+			<?php
+			if (isset($_SESSION['error-update'])) {
+				$error = $_SESSION['error-update'];
+				unset($_SESSION['error-update']);
+				echo $error;
+			}
+			?>
 			<div class="form-group">
 				<div class="placeholder">
 					<input type="text" name="categoryname" id="categoryname" value="<?php echo $category_name; ?>" required autofocus>
@@ -65,6 +74,15 @@ include '../partials/head.php';
 					<label for="image">New Image: </label>
 					<input type="file" name="image" width="200px" height="175px" style=border-radius:15px>
 				</div>
+				<small style="color:red">
+					<?php
+					if (isset($_SESSION['error-extension'])) {
+						$error = $_SESSION['error-extension'];
+						unset($_SESSION['error-extension']);
+						echo $error;
+					}
+					?>
+				</small>
 			</div>
 
 
@@ -88,6 +106,7 @@ include '../partials/head.php';
 
 			<div>
 				<input type="hidden" name="current_image" value="<?php echo $current_image; ?>">
+				<input type="hidden" name="old_category_name" value="<?php echo $category_name; ?>">
 				<input type="hidden" name="category_id" value="<?php echo $category_id; ?>">
 				<button type="submit" name="submit" class="btn">Update Category</button>
 			</div>
@@ -98,68 +117,62 @@ include '../partials/head.php';
 			$clean_categoryid = filter_var($_POST['category_id'], FILTER_SANITIZE_NUMBER_INT);
 			$category_id = filter_var($clean_categoryid, FILTER_VALIDATE_INT);
 
-			$category_name = htmlspecialchars(ucwords($_POST['categoryname']));
+			$category_name = htmlspecialchars(ucwords(trim($_POST['categoryname'])));
 			$current_image = htmlspecialchars($_POST['current_image']);
+			$old_category_name = htmlspecialchars($_POST['old_category_name']);
 			$active = htmlspecialchars($_POST['active']);
 
 
-			if (isset($_FILES['image']['name'])) {
-				$image_name = $_FILES['image']['name'];
+			$new_image_uploaded = false;
 
-				if ($image_name != "") {
-					$image_name_parts = explode('.', $image_name);
-					$ext = end($image_name_parts);
-					$image_name = "Category_Image_" . rand(000, 999) . '.' . $ext;
-					$source_path = $_FILES['image']['tmp_name'];
-					$destination_path = "../../images/category/" . $image_name;
-					$upload = move_uploaded_file($source_path, $destination_path);
+			// Get the old file path
+			$old_image_path = "../../images/category/" . $current_image;
+			$image_name = $_FILES['image']['name'];
+			$temp_name = $_FILES['image']['tmp_name'];
 
-					if ($upload == false) {
-						$_SESSION['upload'] = "
-							<div class='alert alert--danger' id='alert'>
-								<div class='alert__message'>	
-									Failed to Upload Image
-								</div>
-							</div>
-						";
-						header('location:' . SITEURL . 'admin/category_manage/category_manage.php');
-						die();
-					}
-					if ($current_image != "") {
-						$remove_path = "../../images/category/" . $current_image;
+			$image_extension = strtolower(pathinfo($image_name, PATHINFO_EXTENSION));
+			$allowed_extension = ['jpg', 'jpeg', 'png'];
 
-						$remove = unlink($remove_path);
+			if ($image_name) {
 
-						if ($remove == false) {
-							$_SEESION['remove_failed'] = "
-								<div class='alert alert--danger' id='alert'>
-									<div class='alert__message'>	
-										Failed to Remove the Current Image
-									</div>
-								</div>
-							";
-
-							header('location:' . SITEURL . 'admin/category_manage/category_manage.php');
-							die();
-						}
-					}
+				if (!in_array($image_extension, $allowed_extension)) {
+					$_SESSION['error-extension'] = "Only jpg, jpeg and png image extension are allowed";
+					header("location: update_category.php?category_id='$category_id'");
+					exit();
 				} else {
-					$image_name = $current_image;
+					$upload_name = $category_name . '.png';
+					$destination_path = '../../images/category/' . $upload_name;
+					move_uploaded_file($temp_name, $destination_path);
+					$image_url = $upload_name;
+					$new_image_uploaded = true;
 				}
 			} else {
-				$image_name = $current_image;
+				$renaned_image_name = $category_name . '.png';
+				$new_image_path = "../../images/category/" . $renaned_image_name;
+				rename($old_image_path, $new_image_path);
+				$image_url = $new_image_path;
 			}
 
-			$sql2 = "UPDATE category_list SET
-					category_name = '$category_name',
-					image_name = '$image_name',
-					active = '$active'
-					WHERE category_id = $category_id
+			if ($new_image_uploaded && $category_name !== $old_category_name) {
+				unlink($old_image_path);
+			}
+
+
+
+			$categoryUpdate = "UPDATE category_list SET
+					category_name = :category_name,
+					image_name = :image_name,
+					active = :active
+					WHERE category_id = :category_id
 				";
 
-			$res2 = mysqli_query($conn, $sql2);
+			$categoryupdateStatement = $pdo->prepare($categoryUpdate);
+			$categoryupdateStatement->bindParam(':category_id', $category_id, PDO::PARAM_INT);
+			$categoryupdateStatement->bindParam(':category_name', $category_name);
+			$categoryupdateStatement->bindParam(':image_name', $image_url);
+			$categoryupdateStatement->bindParam(':active', $active);
 
-			if ($res2) {
+			if ($categoryupdateStatement->execute()) {
 				$_SESSION['update'] = "
 				<div class='alert alert--success' id='alert'>
 					<div class='alert__message'>
@@ -169,7 +182,7 @@ include '../partials/head.php';
 			";
 				header('location:' . SITEURL . 'admin/category_manage/category_manage.php');
 			} else {
-				$_SESSION['update'] = "
+				$_SESSION['error-update'] = "
 					<div class='alert alert--danger' id='alert'>
 						<div class='alert__message'>	
 							Failed to Update Category
@@ -177,9 +190,10 @@ include '../partials/head.php';
 					</div>
 				";
 
-				header('location:' . SITEURL . 'admin/category_manage/category_manage.php');
+				header("location:" . SITEURL . "admin/category_manage/update_category.php?category_id='$category_id'");
 			}
 		}
+		ob_end_flush();
 		?>
 
 	</div>

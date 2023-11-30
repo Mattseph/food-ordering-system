@@ -12,16 +12,18 @@
             </tr>
 
             <?php
-            $sql = "SELECT `food_name`, `food_price`, `active` FROM `food_list` where `food_price` >= 5";
-            $res = mysqli_query($conn, $sql);
-            $count = mysqli_num_rows($res);
+            $familymeanQuery = "SELECT `food_name`, `food_price`, `active` FROM `food_list` where `food_price` >= :food_price";
+            $familymealStatement = $pdo->prepare($familymeanQuery);
+            $familymealStatement->bindValue(':food_price', 5);
+            $familymealStatement->execute();
+            $familymealCount = $familymealStatement->rowCount();
 
 
-            if ($count > 0) {
-                while ($row = mysqli_fetch_assoc($res)) {
-                    $food_name = $row['food_name'];
-                    $food_price = $row['food_price'];
-                    $active = $row['active'];
+            if ($familymealCount > 0) {
+                while ($family = $familymealStatement->fetch(PDO::FETCH_ASSOC)) {
+                    $food_name = $family['food_name'];
+                    $food_price = $family['food_price'];
+                    $active = $family['active'];
 
 
             ?>

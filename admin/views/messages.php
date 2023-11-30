@@ -33,33 +33,34 @@
 
             <?php
             //Selecting all from table admin.
-            $sql = "SELECT * from messages ORDER BY date_message DESC";
+            $messageQuery = "SELECT * from messages ORDER BY date_message DESC";
             //Executiong the query
-            $res = mysqli_query($conn, $sql);
 
-            if ($res) {    //Count rows
-                $count = mysqli_num_rows($res);
+            $messageStatement = $pdo->query($messageQuery);
+            $messageCount = $messageStatement->rowCount();
+
+            if ($messageCount > 0) {    //Count rows
+                $messages = $messageStatement->fetchAll(PDO::FETCH_ASSOC);
                 //Creating a variable and assign the value.
                 $ID = 1;
 
-                if ($count > 0) {    //Using while loop to get all of the data from database.
-                    //It will run as long as there are data in database.
-                    while ($rows = mysqli_fetch_assoc($res)) {
-                        $message_id = $rows['message_id'];
-                        $user_id = $rows['user_id'];
-                        $message = $rows['message'];
-                        $date = $rows['date_message'];
+                //Using while loop to get all of the data from database.
+                //It will run as long as there are data in database.
+                foreach ($messages as $message) {
+                    $message_id = $message['message_id'];
+                    $user_id = $message['user_id'];
+                    $message = $message['message'];
+                    $date = $message['date_message'];
 
-                        //Display the values in the table
+                    //Display the values in the table
             ?>
-                        <tr>
-                            <td><?php echo $ID++; ?></td>
-                            <td><?php echo $user_id; ?></td>
-                            <td><?php echo $message; ?></td>
-                            <td><?php echo $date; ?></td>
-                        </tr>
+                    <tr>
+                        <td><?php echo $ID++; ?></td>
+                        <td><?php echo $user_id; ?></td>
+                        <td><?php echo $message; ?></td>
+                        <td><?php echo $date; ?></td>
+                    </tr>
             <?php
-                    }
                 }
             }
             ?>

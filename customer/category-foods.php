@@ -5,13 +5,15 @@ if (isset($_GET['category_id'])) {
     //Get the category_id from categories
     $category_id = $_GET['category_id'];
     //Create a query to display first 3 category
-    $sql = "SELECT category_name from category_list WHERE category_id = $category_id";
+    $categoryQuery = "SELECT category_name from category_list WHERE category_id = :category_id";
+    $categoryStatement = $pdo->prepare($categoryQuery);
+    $categoryStatement->bindParam(':category_id', $category_id);
     //Run the query
-    $res = mysqli_query($conn, $sql);
+    $categoryStatement->execute();
     //Get the values of each attribute.
-    $row = mysqli_fetch_assoc($res);
+    $category = $categoryStatement->fetch(PDO::FETCH_ASSOC);
 
-    $category_name = $row['category_name'];
+    $category_name = $category['category_name'];
 } else {
     //Category id doesn't match
     //Redirect to category page
@@ -25,18 +27,20 @@ if (isset($_GET['category_id'])) {
         <section class="food-menu">
 
             <?php
-            $sql2 = "SELECT * FROM food_list WHERE category_id=$category_id";
-            $res2 = mysqli_query($conn, $sql2);
-            $count2 = mysqli_num_rows($res2);
+            $foodQuery = "SELECT * FROM food_list WHERE category_id= :category_id";
+            $foodStatement = $pdo->prepare($foodQuery);
+            $foodStatement->bindParam(':category_id', $category_id);
+            $foodStatement->execute();
+            $foodCount = $foodStatement->rowCount();
 
-            if ($count2 > 0) {
-                while ($row2 = mysqli_fetch_array($res2)) {
+            if ($foodCount > 0) {
+                while ($food = $foodStatement->fetch(PDO::FETCH_ASSOC)) {
                     //Store the value from database to variable
-                    $food_id = $row2['food_id'];
-                    $food_name = $row2['food_name'];
-                    $description = $row2['description'];
-                    $food_price = $row2['food_price'];
-                    $image_name = $row2['image_name'];
+                    $food_id = $food['food_id'];
+                    $food_name = $food['food_name'];
+                    $description = $food['description'];
+                    $food_price = $food['food_price'];
+                    $image_name = $food['image_name'];
 
             ?>
                     <div class="food-menu-box">

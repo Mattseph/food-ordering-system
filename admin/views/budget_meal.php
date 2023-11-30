@@ -12,16 +12,20 @@
             </tr>
 
             <?php
-            $sql = "SELECT `food_name`, `food_price`, `active` FROM `food_list` where `food_price` < 5";
-            $res = mysqli_query($conn, $sql);
-            $count = mysqli_num_rows($res);
+            $budgetmealQuery = "SELECT `food_name`, `food_price`, `active` FROM `food_list` where `food_price` < :food_price";
+            $budgetmealStatement = $pdo->prepare($budgetmealQuery);
+            $budgetmealStatement->bindValue(':food_price', 5);
+            $budgetmealStatement->execute();
+
+            $budgetmealCount = $budgetmealStatement->rowCount();
 
 
-            if ($count > 0) {
-                while ($row = mysqli_fetch_assoc($res)) {
-                    $food_name = $row['food_name'];
-                    $food_price = $row['food_price'];
-                    $active = $row['active'];
+            if ($budgetmealCount > 0) {
+
+                while ($budget = $budgetmealStatement->query(PDO::FETCH_ASSOC)) {
+                    $food_name = $budget['food_name'];
+                    $food_price = $budget['food_price'];
+                    $active = $budget['active'];
 
 
             ?>
