@@ -24,21 +24,10 @@
 		unset($_SESSION['update']);
 	}
 
-	if (isset($_SESSION['pass_not_match'])) {
-		echo $_SESSION['pass_not_match'];
-		unset($_SESSION['pass_not_match']);
+	if (isset($_SESSION['change_pass_success'])) {
+		echo $_SESSION['change_pass_success'];
+		unset($_SESSION['change_pass_success']);
 	}
-
-	if (isset($_SESSION['user_not_found'])) {
-		echo $_SESSION['user_not_found'];
-		unset($_SESSION['user_not_found']);
-	}
-
-	if (isset($_SESSION['change_pass'])) {
-		echo $_SESSION['change_pass'];
-		unset($_SESSION['change_pass']);
-	}
-
 
 	if (isset($_SESSION['no_admin_data_found'])) {
 		echo $_SESSION['no_admin_data_found'];
@@ -57,45 +46,46 @@
 		<table>
 			<tr>
 				<th>Admin Id</th>
-				<th>Lastname</th>
-				<th>Firstname</th>
+				<th>Name</th>
 				<th>Username</th>
+				<th>Email</th>
 				<th>Actions</th>
 			</tr>
 
 			<?php
-			//Selecting all from table admin.
-			$sql = "SELECT * from admin_list ORDER BY admin_id DESC";
+			//Selecting all from table admin.-
+			$userAdmin = "SELECT * FROM users WHERE user_role = :role ORDER BY user_id";
 			//Executiong the query
-			$res = mysqli_query($conn, $sql);
+			$adminStatement = $pdo->prepare($userAdmin);
+			$adminStatement->bindValue(':role', 'Administrator');
+			$adminStatement->execute();
+			$adminCount = $adminStatement->rowCount();
 
-			if ($res) {	//Count rows
-				$count = mysqli_num_rows($res);
+			if ($adminCount > 0) {
 				//Creating a variable and assign the value.
 				$serial = 1;
-
-				if ($count > 0) {	//Using while loop to get all of the data from database.
-					//It will run as long as there are data in database.
-					while ($rows = mysqli_fetch_array($res)) {
-						$admin_id = $rows['admin_id'];
-						$lastname = $rows['lastname'];
-						$firstname = $rows['firstname'];
-						$username = $rows['username'];
-						//Display the values in the table
+				//Using foreach loop to get all of the data from database.
+				//It will run as long as there are data in database.
+				while ($admin = $adminStatement->fetch(PDO::FETCH_ASSOC)) {
+					$admin_id = $admin['user_id'];
+					$lastname = $admin['user_lastname'];
+					$firstname = $admin['user_firstname'];
+					$username = $admin['user_username'];
+					$email = $admin['user_email'];
+					//Display the values in the table
 			?>
-						<tr>
-							<td><?php echo $serial++; ?></td>
-							<td><?php echo $lastname; ?></td>
-							<td><?php echo $firstname; ?></td>
-							<td><?php echo $username; ?></td>
-							<td>
-								<a href="<?php echo SITEURL; ?>admin/admin_manage/update_admin.php?admin_id=<?php echo $admin_id; ?>" class="btn btn-second">Update</a>
-								<a href="<?php echo SITEURL; ?>admin/admin_manage/delete_admin.php?admin_id=<?php echo $admin_id; ?>" class="btn btn-third">Delete</a>
-								<a href="<?php echo SITEURL; ?>admin/admin_manage/update_password.php?admin_id=<?php echo $admin_id; ?>" class="btn btn-first">Change Password</a>
-							</td>
-						</tr>
+					<tr>
+						<td><?php echo $serial++; ?></td>
+						<td><?php echo $lastname . ', ' . $firstname; ?></td>
+						<td><?php echo $username; ?></td>
+						<td><?php echo $email; ?></td>
+						<td>
+							<a href="<?php echo SITEURL; ?>admin/admin_manage/update_admin.php?admin_id=<?php echo $admin_id; ?>" class="btn btn-second">Update</a>
+							<a href="<?php echo SITEURL; ?>admin/admin_manage/delete_admin.php?admin_id=<?php echo $admin_id; ?>" class="btn btn-third">Delete</a>
+							<a href="<?php echo SITEURL; ?>admin/admin_manage/update_password.php?admin_id=<?php echo $admin_id; ?>" class="btn btn-first">Change Password</a>
+						</td>
+					</tr>
 			<?php
-					}
 				}
 			}
 			?>

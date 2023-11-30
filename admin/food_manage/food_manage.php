@@ -60,24 +60,24 @@ include '../partials/head.php';
 			</tr>
 
 			<?php
-			$sql = "SELECT * from food_list ORDER BY food_id DESC";
-			$res = mysqli_query($conn, $sql);
-			$count = mysqli_num_rows($res);
-			$IDD = 1;
+			$foodQuery = "SELECT * from food_list ORDER BY food_id DESC";
+			$foodStatement = $pdo->query($foodQuery);
+			$foods = $foodStatement->fetchAll(PDO::FETCH_ASSOC);
+			$ID = 1;
 
-			if ($count > 0) {
-				while ($row = mysqli_fetch_assoc($res)) {
-					$food_id = $row['food_id'];
-					$food_name = $row['food_name'];
-					$price = $row['food_price'];
-					$available_quantity = $row['available_quantity'];
-					$image_name = $row['image_name'];
-					$active = $row['active'];
+			if ($foods) {
+				foreach ($foods as $food) {
+					$food_id = $food['food_id'];
+					$food_name = $food['food_name'];
+					$price = $food['food_price'];
+					$available_quantity = $food['available_quantity'];
+					$image_name = $food['image_name'];
+					$active = $food['active'];
 
 
 			?>
 					<tr>
-						<td><?php echo $IDD++; ?></td>
+						<td><?php echo $ID++; ?></td>
 						<td><?php echo $food_name; ?></td>
 						<td>$<?php echo $price; ?></td>
 						<td><?php echo $available_quantity; ?></td>

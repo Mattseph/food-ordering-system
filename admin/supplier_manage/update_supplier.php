@@ -11,25 +11,27 @@ include '../partials/head.php';
 		$clean_id = filter_var($_GET['supplier_id'], FILTER_SANITIZE_NUMBER_INT);
 		$supplier_id = filter_var($clean_id, FILTER_VALIDATE_INT);
 
-		$sql = "SELECT * from suppliers where supplier_id = $supplier_id";
-		$res = mysqli_query($conn, $sql);
+		$supplierQuery = "SELECT * from suppliers where supplier_id = :supplier_id";
+		$supplierStatement = $pdo->prepare($supplierQuery);
+		$supplierStatement->bindParam(':supplier_id', $supplier_id, PDO::PARAM_INT);
 
 		//Check whether the query is executed or not.
-		if ($res) {
-			$count = mysqli_num_rows($res);
-			if ($count === 1) {
-				$row = mysqli_fetch_assoc($res);
+		if ($supplierStatement->execute()) {
+			$supplierCount = $supplierStatement->rowCount();
 
-				$supplier_lastname = htmlspecialchars($row['supplier_lastname']);
-				$supplier_firstname = htmlspecialchars($row['supplier_firstname']);
-				$sanitize_contact = filter_var($row['contact_number'], FILTER_SANITIZE_NUMBER_INT);
+			if ($supplierCount === 1) {
+				$supplier = $supplierStatement->fetch(PDO::FETCH_ASSOC);
+
+				$supplier_lastname = htmlspecialchars($supplier['supplier_lastname']);
+				$supplier_firstname = htmlspecialchars($supplier['supplier_firstname']);
+				$sanitize_contact = filter_var($supplier['contact_number'], FILTER_SANITIZE_NUMBER_INT);
 				$contact_number = filter_var($sanitize_contact, FILTER_VALIDATE_INT);
-				$sanitize_email = filter_var($row['email'], FILTER_SANITIZE_EMAIL);
+				$sanitize_email = filter_var($supplier['email'], FILTER_SANITIZE_EMAIL);
 				$email = filter_var($sanitize_email, FILTER_VALIDATE_EMAIL);
-				$address = htmlspecialchars($row['address']);
-				$country = htmlspecialchars($row['country']);
-				$postal_code = htmlspecialchars($row['postal_code']);
-				$active = htmlspecialchars($row['active']);
+				$address = htmlspecialchars($supplier['address']);
+				$country = htmlspecialchars($supplier['country']);
+				$postal_code = htmlspecialchars($supplier['postal_code']);
+				$active = htmlspecialchars($supplier['active']);
 			} else {
 				$_SESSION['no_supplier_data_found'] = "
 					<div class='alert alert--danger' id='alert'>
@@ -153,21 +155,30 @@ if (filter_has_var(INPUT_POST, 'submit')) {
 	$postal_code = htmlspecialchars($_POST['postalcode']);
 	$active = htmlspecialchars($_POST['active']);
 
-	$sql = "UPDATE suppliers SET
-		supplier_lastname = '$supplier_lastname',
-		supplier_firstname = '$supplier_firstname',
-		contact_number = '$contact_number',
-		email = '$email',
-		address = '$address',
-		country = '$country',
-		postal_code = '$postal_code',
-		active = '$active'
-		WHERE supplier_id = $supplier_id
+	$updatesupplierQuery = "UPDATE suppliers SET
+		supplier_lastname = :supplier_lastname,
+		supplier_firstname = :supplier_firstname,
+		contact_number = :contact_number,
+		email = :email,
+		address = :address,
+		country = :country,
+		postal_code = :postal_code,
+		active = :active
+		WHERE supplier_id = :supplier_id
 	";
 
-	$res = mysqli_query($conn, $sql);
+	$updatesupplierStatement = $pdo->prepare($updatesupplierQuery);
+	$updatesupplierStatement->bindParam(':supplier_id', $supplier_id);
+	$updatesupplierStatement->bindParam(':supplier_lastname', $supplier_lastname);
+	$updatesupplierStatement->bindParam(':supplier_firstname', $supplier_firstname);
+	$updatesupplierStatement->bindParam(':contact_number', $contact_number);
+	$updatesupplierStatement->bindParam(':email', $email);
+	$updatesupplierStatement->bindParam(':address', $address);
+	$updatesupplierStatement->bindParam(':country', $country);
+	$updatesupplierStatement->bindParam(':postal_code', $postal_code);
+	$updatesupplierStatement->bindParam(':active', $active);
 
-	if ($res) {
+	if ($updatesupplierStatement->execute()) {
 		$_SESSION['update'] = "
 			<div class='alert alert--success' id='alert'>
 				<div class='alert__message'>

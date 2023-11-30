@@ -6,15 +6,19 @@
         <h2>Food Categories</h2>
         <section class="category-menu">
             <?php
-            $sql = "SELECT * FROM category_list WHERE active = 'Yes' LIMIT 3";
-            $res = mysqli_query($conn, $sql);
-            $count = mysqli_num_rows($res);
+            $active = 'Yes';
+            $categoryQuery = "SELECT * FROM category_list WHERE active = :active LIMIT 3";
+            $categoryStatement = $pdo->prepare($categoryQuery);
+            $categoryStatement->bindParam(':active', $active);
+            $categoryStatement->execute();
 
-            if ($count > 0) {
-                while ($row = mysqli_fetch_assoc($res)) {
-                    $category_id = $row['category_id'];
-                    $category_name = $row['category_name'];
-                    $image_name = $row['image_name'];
+            $categoryCount = $categoryStatement->rowCount();
+
+            if ($categoryCount > 0) {
+                while ($category = $categoryStatement->fetch(PDO::FETCH_ASSOC)) {
+                    $category_id = $category['category_id'];
+                    $category_name = $category['category_name'];
+                    $image_name = $category['image_name'];
             ?>
 
                     <a href="<?php echo SITEURL; ?>customer/category-foods.php?category_id=<?php echo $category_id; ?>">

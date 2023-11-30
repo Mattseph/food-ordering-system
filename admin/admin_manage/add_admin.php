@@ -3,11 +3,11 @@
 <div class="form">
 
 	<?php
-	if (isset($_SESSION['add'])) //Checking whether the session is set or not
+	if (isset($_SESSION['pass_not_match'])) //Checking whether the session is set or not
 	{	//DIsplaying session message
-		echo $_SESSION['add'];
+		echo $_SESSION['pass_not_match'];
 		//Removing session message
-		unset($_SESSION['add']);
+		unset($_SESSION['pass_not_match']);
 	}
 	?>
 	<div class="row">
@@ -31,6 +31,20 @@
 				<div class="placeholder">
 					<input type="text" name="username" id="username" title="Username must be at least 5 characters" pattern="[A-Za-z0-9!@#$%^&*()_+=-?/ ]{5,}" required>
 					<label for="username">Username</label>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="placeholder">
+					<input type="email" name="email" id="email" pattern="[A-Za-z0-9.-_@+]+@[A-Za-z0-9 -]+\.[a-z]{2,}" required>
+					<label for="username">Email</label>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="placeholder">
+					<input type="tel" name="contactnumber" title="Must Be 11-Digit" id="phonenumber" pattern="09[0-9]{9}" title="09XXXXXXXXX" maxLength="11" required>
+					<label for="username">Phone Number</label>
 				</div>
 			</div>
 
@@ -65,29 +79,46 @@ if (filter_has_var(INPUT_POST, 'submit')) {
 	$lastname = htmlspecialchars(ucwords($_POST["lastname"]));
 	$firstname = htmlspecialchars(ucwords($_POST["firstname"]));
 	$username = htmlspecialchars($_POST["username"]);
+	$email = htmlspecialchars($_POST['email']);
+	$phonenumber = htmlspecialchars($_POST['contactnumber']);
 	$password1 = htmlspecialchars(md5($_POST["password1"]));
 	$password2 = htmlspecialchars(md5($_POST["password2"]));
+	$user_role = htmlspecialchars('Administrator');
 
 	if ($password1 == $password2) {
 
-		$sql = "INSERT INTO admin_list
+		$insertadminQuery = "INSERT INTO users
 			(
-				lastname,
-				firstname,
-				username,
-				password
+				user_lastname,
+				user_firstname,
+				user_username,
+				user_password,
+				user_email,
+				user_phonenumber,
+				user_role
+
 			)
 			VALUES
 			(
-				'$lastname',
-				'$firstname',
-				'$username',
-				'$password1'
+				:user_lastname,
+				:user_firstname,
+				:user_username,
+				:user_password,
+				:user_email,
+				:user_phonenumber,
+				:user_role
 			)";
 
-		$res = mysqli_query($conn, $sql);
+		$insertadminStatement = $pdo->prepare($insertadminQuery);
+		$insertadminStatement->bindParam(':user_lastname', $lastname);
+		$insertadminStatement->bindParam(':user_firstname', $firstname);
+		$insertadminStatement->bindParam(':user_username', $username);
+		$insertadminStatement->bindParam(':user_password', $password1);
+		$insertadminStatement->bindParam(':user_email', $email);
+		$insertadminStatement->bindParam(':user_phonenumber', $phonenumber);
+		$insertadminStatement->bindParam(':user_role', $user_role);
 
-		if ($res) {
+		if ($insertadminStatement->execute()) {
 			//To show display messege once data has been inserted
 			$_SESSION['add'] = "
 				<div class='alert alert--success' id='alert'>
@@ -113,7 +144,7 @@ if (filter_has_var(INPUT_POST, 'submit')) {
 			header("location:" . SITEURL .	'admin/admin_manage/add_admin.php');
 		}
 	} else {
-		$_SESSION['add'] = "
+		$_SESSION['pass_not_match'] = "
 			<div class='alert alert--danger' id='alert'>
 				<div class='alert__message'>	
 					Password Did Not Match

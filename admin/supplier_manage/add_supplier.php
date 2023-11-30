@@ -114,19 +114,27 @@ if (filter_has_var(INPUT_POST, 'submit')) {
         )
         VALUES
         (
-            '$supplier_lastname',
-			'$supplier_firstname',
-			'$contact_number',
-			'$email',
-			'$address',
-			'$country',
-			'$postal_code',
-            '$active'
+            :supplier_lastname,
+			:supplier_firstname,
+			:contact_number,
+			:email,
+			:address,
+			:country,
+			:postal_code,
+            :active
 		)";
 
-    $res = mysqli_query($conn, $sql);
+    $statement = $pdo->prepare($sql);
+    $statement->bindParam(':supplier_lastname', $supplier_lastname);
+    $statement->bindParam(':supplier_firstname', $supplier_firstname);
+    $statement->bindParam(':contact_number', $contact_number, PDO::PARAM_INT);
+    $statement->bindParam(':email', $email);
+    $statement->bindParam(':address', $address);
+    $statement->bindParam(':country', $country);
+    $statement->bindParam(':postal_code', $postal_code);
+    $statement->bindParam(':active', $active);
 
-    if ($res) {
+    if ($statement->execute()) {
         //To show display messege once data has been inserted
         $_SESSION['add'] = "
             <div class='alert alert--success' id='alert'>

@@ -20,52 +20,54 @@
 			<div class="form-group">
 				<div class="placeholder">
 					<input type="text" name="foodname" id="foodname" pattern="[A-Za-z0-9 -]+" required autofocus>
-					<label for="foodname">Food Name:</label>
+					<label for="foodname">Food Name</label>
 				</div>
 			</div>
 
 			<div class="description">
 				<div class="placeholder">
 					<textarea name="description" id="description" required pattern="[A-Za-z0-9 -]+"></textarea>
-					<label for="description">Description:</label>
+					<label for="description">Description</label>
 				</div>
 			</div>
 
 			<div class="form-group">
 				<div class="placeholder">
-					<input type="number" step="0.01" name="foodprice" id="price" value="1" required>
+					<input type="number" step="0.01" name="foodprice" id="price" required>
 					<label for="price">Price</label>
 				</div>
 			</div>
 
 			<div class="form-group">
 				<div class="placeholder">
-					<input type="number" step="1" name="available_quantity" id="available_quantity" value="1" required>
+					<input type="number" step="1" name="available_quantity" id="available_quantity" required>
 					<label for="available_quantity">Available Quantity</label>
 				</div>
 			</div>
 
 			<div class="form-group">
 				<div class="file">
-					<label for="image">Select: </label>
+					<label for="image">Select </label>
 					<input type="file" name="image">
 				</div>
 			</div>
 
 			<div class="form-group">
 				<div class="placeholder">
-
 					<select name="category" required>
 						<?php
 
-						$sql = "SELECT * FROM category_list WHERE active = 'YES'";
-						$res = mysqli_query($conn, $sql);
-						$count = mysqli_num_rows($res);
+						$categoryQuery = "SELECT * FROM category_list WHERE active = :active";
+						$categoryStatement = $pdo->prepare($categoryQuery);
+						$categoryStatement->bindValue(':active', 'Yes');
+						$categoryStatement->execute();
 
-						if ($count > 0) {
-							while ($row = mysqli_fetch_assoc($res)) {
-								$category_id = $row['category_id'];
-								$category_name = $row['category_name'];
+						$categoryCount = $categoryStatement->rowCount();
+
+						if ($categoryCount > 0) {
+							while ($category = $categoryStatement->fetch(PDO::FETCH_ASSOC)) {
+								$category_id = $category['category_id'];
+								$category_name = $category['category_name'];
 
 						?>
 
@@ -81,7 +83,7 @@
 
 						?>
 					</select>
-					<label for="category">Category: </label>
+					<label for="category">Category </label>
 				</div>
 			</div>
 
@@ -89,15 +91,17 @@
 				<div class="placeholder">
 					<select name="supplier" required>
 						<?php
-						$sql2 = "SELECT * FROM suppliers WHERE active = 'Yes'";
-						$res2 = mysqli_query($conn, $sql2);
-						$count2 = mysqli_num_rows($res2);
+						$supplierQuery = "SELECT * FROM suppliers WHERE active = :active";
+						$supplierStatement = $pdo->prepare($supplierQuery);
+						$supplierStatement->bindValue(':active', 'Yes');
+						$supplierStatement->execute();
+						$supplierCount = $supplierStatement->rowCount();
 
-						if ($count2 > 0) {
-							while ($row2 = mysqli_fetch_assoc($res2)) {
-								$supplier_id = $row2['supplier_id'];
-								$supplier_lastname = $row2['supplier_lastname'];
-								$supplier_firstname = $row2['supplier_firstname'];
+						if ($supplierCount > 0) {
+							while ($supplier = $supplierStatement->fetch(PDO::FETCH_ASSOC)) {
+								$supplier_id = $supplier['supplier_id'];
+								$supplier_lastname = $supplier['supplier_lastname'];
+								$supplier_firstname = $supplier['supplier_firstname'];
 
 						?>
 								<option value="<?php echo $supplier_id; ?>"><?php echo $supplier_lastname . ', ' . $supplier_firstname; ?></option>
@@ -113,7 +117,7 @@
 
 						?>
 					</select>
-					<label for="supplier">Supplier: </label>
+					<label for="supplier">Supplier </label>
 				</div>
 			</div>
 
@@ -157,29 +161,30 @@
 				$active = "No";
 			}
 
-			if (isset($_FILES['image']['name'])) {
-				$image_name = $_FILES['image']['name'];
-				if ($image_name != "") {
+			$image_name = $_FILES['image']['name'];
+			$temp_name = $_FILES['image']['tmp_name'];
 
-					$image_name_parts = explode('.', $image_name);
-					$ext = end($image_name_parts);
-					$image_name = "Food_Name_" . rand(000, 999) . '.' . $ext;
-					$sourcepath = $_FILES['image']['tmp_name'];
-					$destinationpath = "../../images/food/" . $image_name;
-					$upload = move_uploaded_file($sourcepath, $destinationpath);
+			$image_extension = strtolower(pathinfo($image_name, PATHINFO_EXTENSION));
+			$allowed_extension = ['jpg', 'jpeg', 'png'];
+			if ($image_name) {
 
-					if ($upload == false) {
-						$_SESSION['upload'] = "<div id='message' class='fail food-message'><img src='../../images/logo/warning.svg'alt='warning' class='warning'><span>Failed to Upload Image</div>";
-						header('location:' . SITEURL . 'admin/food_manage/add_food.php');
-						die();
-					}
+				if (!in_array($image_extension, $allowed_extension)) {
+					$_SESSION['error-extension'] = "Only jpg, jpeg and png image extension are allowed";
+
+					header('location:' . SITEURL . 'admin/food_manage/add_food.php');
+					exit();
+				} else {
+					$upload_name = $image_name . '.png';
+					$destination_path = "../../images/food/" . $upload_name;
+					move_uploaded_file($temp_name, $destination_path);
+					$image_url = $upload_name;
 				}
 			} else {
-				$image_name = "";
+				$image_url = "";
 				echo "<script>alert('Failed to Update Food')</script>";
 			}
 
-			$sql = "INSERT INTO food_list
+			$insertQuery = "INSERT INTO food_list
 				( 
 					category_id,
 					supplier_id,
@@ -192,19 +197,27 @@
 				)
 				VALUES
 				(
-					$category_id,
-					$supplier_id,
-					'$food_name', 
-					'$description',
-					$food_price,
-					$available_quantity,
-					'$image_name',
-					'$active'
+					:category_id,
+					:supplier_id,
+					:food_name, 
+					:description,
+					:food_price,
+					:available_quantity,
+					:image_name,
+					:active
 				)";
 
-			$res = mysqli_query($conn, $sql);
+			$insertfoodStatement = $pdo->prepare($insertQuery);
+			$insertfoodStatement->bindParam(':category_id', $category_id, PDO::PARAM_INT);
+			$insertfoodStatement->bindParam(':supplier_id', $category_id, PDO::PARAM_INT);
+			$insertfoodStatement->bindParam(':food_name', $food_name);
+			$insertfoodStatement->bindParam(':description', $description);
+			$insertfoodStatement->bindParam(':food_price', $food_price);
+			$insertfoodStatement->bindParam(':available_quantity', $available_quantity);
+			$insertfoodStatement->bindParam(':image_name', $image_url);
+			$insertfoodStatement->bindParam(':active', $active);
 
-			if ($res) {
+			if ($insertfoodStatement->execute()) {
 				$_SESSION['add'] = "
 					<div class='alert alert--success' id='alert'>
 						<div class='alert__message'>

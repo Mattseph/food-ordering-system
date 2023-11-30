@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 include '../../configuration.php';
 
 if (filter_has_var(INPUT_GET, 'category_id') && filter_has_var(INPUT_GET, 'image_name')) {
@@ -22,15 +22,17 @@ if (filter_has_var(INPUT_GET, 'category_id') && filter_has_var(INPUT_GET, 'image
 		";
 
 			header('location' . SITEURL . 'admin/category_manage/category_manage.php');
-			die();
+			exit();
 		}
 	}
-	mysqli_query($conn, "SET FOREIGN_KEY_CHECKS=0");
-	$sql = "DELETE FROM category_list WHERE category_id = $category_id";
+	$foreignQuery = "SET FOREIGN_KEY_CHECKS=0";
+	$pdo->query($foreignQuery);
 
-	$res = mysqli_query($conn, $sql);
+	$deleteQuery = "DELETE FROM category_list WHERE category_id = :category_id";
+	$deleteStatement = $pdo->prepare($deleteQuery);
+	$deleteStatement->bindParam(':category_id', $category_id, PDO::PARAM_INT);
 
-	if ($res) {
+	if ($deleteStatement->execute()) {
 		$_SESSION['delete'] = "
 			<div class='alert alert--success' id='alert'>
 				<div class='alert__message'>

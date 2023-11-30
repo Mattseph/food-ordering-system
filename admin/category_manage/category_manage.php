@@ -63,27 +63,28 @@ include '../partials/head.php';
 			</tr>
 
 			<?php
-			$sql = "SELECT * from category_list ORDER BY category_id DESC";
-			$res = mysqli_query($conn, $sql);
-			$count = mysqli_num_rows($res);
+			$categoryQuery = "SELECT * from category_list ORDER BY category_id DESC";
+			$categoryStatement = $pdo->query($categoryQuery);
+			$categoryCount = $categoryStatement->rowCount();
 
-			$IDD = 1;
-			if ($count > 0) {
-				while ($row = mysqli_fetch_assoc($res)) {
-					$category_id = $row['category_id'];
-					$category_name = $row['category_name'];
-					$image_name = $row['image_name'];
-					$active = $row['active'];
+			$ID = 1;
+			if ($categoryCount > 0) {
+				$categories = $categoryStatement->fetchAll(PDO::FETCH_ASSOC);
+				foreach ($categories as $category) {
+					$category_id = $category['category_id'];
+					$category_name = $category['category_name'];
+					$image_name = $category['image_name'];
+					$active = $category['active'];
 
 			?>
 					<tr>
-						<td><?php echo $IDD++; ?></td>
+						<td><?php echo $ID++; ?></td>
 						<td><?php echo $category_name; ?></td>
 						<td>
 							<?php
-							if ($image_name != "") {
+							if (isset($image_name)) {
 							?>
-								<img src="<?php echo SITEURL; ?>images/category/<?php echo $image_name ?>" width="70px">
+								<img src="../../images/category/<?php echo $image_name ?>" width="70px" height="70px">
 							<?php
 							} else {
 								echo "<div class='fail category-message'>No Image</div>";

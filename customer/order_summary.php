@@ -9,31 +9,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/main.css">
     <title>Order Summary</title>
-    <link rel="icon" type="image/jpg" href="../images/logo/logo.jpg">
+    <link rel="icon" type="image/png" href="../images/logo/logo.png">
     <script src="../js/timer.js" type="text/javascript"></script>
 </head>
 
 <?php
 
-$sql = "SELECT * FROM order_details ORDER BY order_date DESC LIMIT 1";
-$result = mysqli_query($conn, $sql);
+$ordersummaryQuery = "SELECT * FROM order_details ORDER BY order_date DESC LIMIT 1";
+$ordersummaryStatement = $pdo->query($ordersummaryQuery);
 
-$count = mysqli_num_rows($result);
+$ordersummaryCount = $ordersummaryStatement->rowCount();
 
-if ($count === 1) {
-    $order = mysqli_fetch_assoc($result);
+if ($ordersummaryCount === 1) {
+    $orders = $ordersummaryStatement->fetchAll(PDO::FETCH_ASSOC);
 
-    $order_id = $order['order_id'];
-    $customer_lastname = $order['customer_lastname'];
-    $customer_firstname = $order['customer_firstname'];
-    $customer_number = $order['contact_number'];
-    $delivery_address = $order['delivery_address'];
-    $mode_of_payment = $order['mode_of_payment'];
-    $postalcode = $order['postalcode'];
-    $order_date = $order['order_date'];
-    $expected_delivery = $order['expected_delivery'];
-    $quantity = $order['quantity'];
-    $total = $order['total'];
+    foreach ($orders as $order) {
+
+        $order_id = $order['order_id'];
+        $customer_lastname = $order['customer_lastname'];
+        $customer_firstname = $order['customer_firstname'];
+        $customer_number = $order['contact_number'];
+        $delivery_address = $order['delivery_address'];
+        $mode_of_payment = $order['mode_of_payment'];
+        $postalcode = $order['postalcode'];
+        $order_date = $order['order_date'];
+        $expected_delivery = $order['expected_delivery'];
+        $quantity = $order['quantity'];
+        $total = $order['total'];
+    }
 }
 
 
@@ -65,12 +68,15 @@ if ($count === 1) {
                 <?php
                 $food_id = $_SESSION['food_id'];
 
-                $sql2 = "SELECT * FROM food_list WHERE food_id = '$food_id'";
-                $result2 = mysqli_query($conn, $sql2);
-                $count2 = mysqli_num_rows($result2);
+                $foodQuery = "SELECT * FROM food_list WHERE food_id = '$food_id'";
+                $foodStatement = $pdo->prepare($foodQuery);
+                $foodStatement->bindParam(':food_id', $food_id);
+                $foodStatement->execute();
 
-                if ($count2 === 1) {
-                    $food = mysqli_fetch_assoc($result2);
+                $foodCount = $foodStatement->rowCount();
+
+                if ($foodCount === 1) {
+                    $food = $foodStatement->fetch(PDO::FETCH_ASSOC);
 
                     $food_name = $food['food_name'];
                     $food_price = $food['food_price'];

@@ -8,21 +8,24 @@
         <section class="food-menu">
 
             <?php
+            $active = "Yes";
             //Display food that's active.
-            $sql = "SELECT * FROM food_list WHERE active = 'Yes'";
+            $foodQuery = "SELECT * FROM food_list WHERE active = :active";
+            $foodStatement = $pdo->prepare($foodQuery);
+            $foodStatement->bindParam(':active', $active);
             //Execute the query above.
-            $res = mysqli_query($conn, $sql);
+            $foodStatement->execute();
             //Number of rows in the result set.
-            $count = mysqli_num_rows($res);
+            $foodCount = $foodStatement->rowCount();
 
-            if ($count > 0) {
+            if ($foodcount > 0) {
                 //Get the Food Available in Database.
-                while ($row = mysqli_fetch_assoc($res)) {
-                    $food_id = $row['food_id'];
-                    $food_name = $row['food_name'];
-                    $description = $row['description'];
-                    $food_price = $row['food_price'];
-                    $image_name = $row['image_name'];
+                while ($food = $foodStatement->fetch(PDO::FETCH_ASSOC)) {
+                    $food_id = $food['food_id'];
+                    $food_name = $food['food_name'];
+                    $description = $food['description'];
+                    $food_price = $food['food_price'];
+                    $image_name = $food['image_name'];
             ?>
                     <div class="food-menu-box">
                         <div class="food-menu-img">

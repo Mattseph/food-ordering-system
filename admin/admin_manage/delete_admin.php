@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 include '../../configuration.php';
 
 //Get the id to be deleted
@@ -8,12 +8,11 @@ if (filter_has_var(INPUT_GET, 'admin_id')) {
 	$admin_id = filter_var($clean_id, FILTER_VALIDATE_INT);
 
 	//SQL query to delete admin
-	$sql = "DELETE FROM admin_list WHERE admin_id = $admin_id";
+	$deleteadminQuery = "DELETE FROM users WHERE user_id = :admin_id";
+	$deleteadminStatement = $pdo->prepare($deleteadminQuery);
+	$deleteadminStatement->bindParam(':admin_id', $admin_id, PDO::PARAM_INT);
 
-	//Execute the query
-	$res = mysqli_query($conn, $sql);
-
-	if ($res) {
+	if ($deleteadminStatement->execute()) {
 		//Creating SESSION variable to display message.
 		$_SESSION['delete'] = "
 			<div class='alert alert--success' id='alert'>
@@ -32,6 +31,7 @@ if (filter_has_var(INPUT_GET, 'admin_id')) {
 					Failed to Delete Admin Profile, Please try again
                 </div>
 			</div>
+
 		";
 		//Redirecting to the manage admin page.
 		header('location:' . SITEURL . 'admin/admin_manage/admin_manage.php');

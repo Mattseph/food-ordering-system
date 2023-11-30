@@ -36,38 +36,38 @@
 
 			<?php
 			//Create a Query
-			$sql = "SELECT * from order_details ORDER BY order_date DESC";
+			$orderQuery = "SELECT * from order_details ORDER BY order_date DESC";
 			//Execution of the query
-			$res = mysqli_query($conn, $sql);
+			$orderStatement = $pdo->query($orderQuery);
+			$orders = $orderStatement->fetchAll(PDO::FETCH_ASSOC);
 
-			//Check whether the query is successfully executed
-			if ($res) {
-				//Count rows of the result
-				$count = mysqli_num_rows($res);
-				//Creating a variable and assign the value.
+			if ($orders) {
+				//Using foreach loop to get all of the data from database.
+				//It will run as long as there are data in database.
+				foreach ($orders as $order) {
+					$order_id = $order['order_id'];
+					$lastname = $order['customer_lastname'];
+					$firstname = $order['customer_firstname'];
+					$contact_number = $order['contact_number'];
+					$delivery_address = $order['delivery_address'];
+					$rider_id = $order['rider_id'];
+					$food_id = $order['food_id'];
+					$quantity = $order['quantity'];
+					$total = $order['total'];
+					$mode_of_payment = $order['mode_of_payment'];
+					$order_date = $order['order_date'];
+					$status = $order['status'];
 
-				if ($count > 0) {
-					//Using while loop to get all of the data from database.
-					//It will run as long as there are data in database.
+					$foodQuery = "SELECT food_name FROM food_list WHERE food_id = :food_id";
+					$foodStatement = $pdo->prepare($foodQuery);
+					$foodStatement->bindParam(':food_id', $food_id);
+					$foodStatement->execute();
+					$foodCount = $foodStatement->rowCount();
 
-					while ($rows = mysqli_fetch_assoc($res)) {
-						$order_id = $rows['order_id'];
-						$lastname = $rows['customer_lastname'];
-						$firstname = $rows['customer_firstname'];
-						$contact_number = $rows['contact_number'];
-						$delivery_address = $rows['delivery_address'];
-						$rider_id = $rows['rider_id'];
-						$food_id = $rows['food_id'];
-						$quantity = $rows['quantity'];
-						$total = $rows['total'];
-						$mode_of_payment = $rows['mode_of_payment'];
-						$order_date = $rows['order_date'];
-						$status = $rows['status'];
+					if ($foodCount > 0) {
+						$food = $foodStatement->fetch(PDO::FETCH_ASSOC);
 
-						$sql2 = "SELECT food_name FROM food_list WHERE food_id = '$food_id'";
-						$res2 = mysqli_query($conn, $sql2);
-						$row2 = mysqli_fetch_assoc($res2);
-						$food_name = $row2['food_name'];
+						$food_name = $food['food_name'];
 
 						//Display the values in the table
 			?>

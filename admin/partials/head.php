@@ -11,8 +11,8 @@
 </head>
 
 <?php
-include '../../configuration.php';
-include '../../login_checker.php';
+include __DIR__ . '/../../configuration.php';
+include __DIR__ . '/../../login_checker.php';
 ?>
 
 <body>

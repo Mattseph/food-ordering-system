@@ -16,17 +16,20 @@
         <section class="food-menu">
             <?php
 
-            $sql = "SELECT * FROM food_list WHERE food_name LIKE '%$search%' OR description LIKE '%$search%'";
-            $res = mysqli_query($conn, $sql);
-            $count = mysqli_num_rows($res);
+            $foodsearchQuery = "SELECT * FROM food_list WHERE food_name LIKE '%$search%' UNION ALL SELECT * FROM food_list WHERE description LIKE '%$search%'";
+            $foodsearchStatement = $pdo->prepare($foodsearchQuery);
+            $foodsearchStatement->bindParam(':search', $search);
+            $foodsearchStatement->execute();
 
-            if ($count > 0) {
-                while ($row = mysqli_fetch_assoc($res)) {
-                    $food_id = $row['food_id'];
-                    $food_name = $row['food_name'];
-                    $description = $row['description'];
-                    $food_price = $row['food_price'];
-                    $image_name = $row['image_name'];
+            $foodsearchCount = $foodsearchStatement->rowCount();
+
+            if ($foodsearchCount > 0) {
+                while ($food = $foodsearchStatement->fetch(PDO::FETCH_ASSOC)) {
+                    $food_id = $food['food_id'];
+                    $food_name = $food['food_name'];
+                    $description = $food['description'];
+                    $food_price = $food['food_price'];
+                    $image_name = $food['image_name'];
             ?>
                     <div class="food-menu-box">
                         <div class="food-menu-img">

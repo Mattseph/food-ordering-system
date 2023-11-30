@@ -7,18 +7,20 @@
 
 		$clean_id = filter_var($_GET['admin_id'], FILTER_SANITIZE_NUMBER_INT);
 		$admin_id = filter_var($clean_id, FILTER_VALIDATE_INT);
-		$sql = "SELECT * from admin_list where admin_id = '$admin_id'";
-		$res = mysqli_query($conn, $sql);
+
+		$adminQuery = "SELECT * from users where user_id = :user_id";
+		$adminStatement = $pdo->prepare($adminQuery);
+		$adminStatement->bindParam(':user_id', $admin_id, PDO::PARAM_INT);
 
 		//Check whether the query is executed or not.
-		if ($res) {
-			$count = mysqli_num_rows($res);
+		if ($adminStatement->execute()) {
+			$adminCount = $adminStatement->rowCount();
 
-			if ($count === 1) {
-				$row = mysqli_fetch_assoc($res);
-				$lastname = $row['lastname'];
-				$firstname = $row['firstname'];
-				$username = $row['username'];
+			if ($adminCount === 1) {
+				$admin = $adminStatement->fetch(PDO::FETCH_ASSOC);
+				$lastname = $admin['user_lastname'];
+				$firstname = $admin['user_firstname'];
+				$username = $admin['user_username'];
 			} else {
 				$_SESSION['no_admin_data_found'] = "
 					<div class='alert alert--danger' id='alert'>
@@ -79,16 +81,20 @@ if (filter_has_var(INPUT_POST, 'submit')) {
 	$firstname = htmlspecialchars(ucwords($_POST['firstname']));
 	$username = htmlspecialchars($_POST['username']);
 
-	$sql = "UPDATE admin_list SET
-		lastname = '$lastname',
-		firstname = '$firstname',
-		username = '$username'
-		WHERE admin_id = '$admin_id'
+	$updateadminQuery = "UPDATE users SET
+		user_lastname = :lastname,
+		user_firstname = :firstname,
+		user_username = :username
+		WHERE user_id = :admin_id
 	";
 
-	$res = mysqli_query($conn, $sql);
+	$updateadminStatement = $pdo->prepare($updateadminQuery);
+	$updateadminStatement->bindParam(':admin_id', $admin_id, PDO::PARAM_INT);
+	$updateadminStatement->bindParam(':lastname', $lastname);
+	$updateadminStatement->bindParam(':firstname', $firstname);
+	$updateadminStatement->bindParam(':username', $username);
 
-	if ($res) {
+	if ($updateadminStatement->execute()) {
 		$_SESSION['update'] = "
 			<div class='alert alert--success' id='alert'>
 				<div class='alert__message'>

@@ -36,7 +36,7 @@
 
             <div class="form-group">
                 <div class="placeholder">
-                    <input type="email" id="email" name="email" pattern="[A-Za-z0-9.-_@+]+@[A-Za-z0-9 -]+\.[a-z]{2,}" required>
+                    <input type="email" id="email" name="email" pattern="[A-Za-z0-9À-ž]+@[A-Za-z0-9À-ž]+\.[a-z]{2,}" required>
                     <label for="email">Email</label>
                 </div>
             </div>
@@ -82,7 +82,7 @@ if (filter_has_var(INPUT_POST, 'submit')) {
     }
 
 
-    $sql = "INSERT INTO delivery_rider
+    $insertriderQuery = "INSERT INTO delivery_rider
         (
 			rider_lastname,
             rider_firstname,
@@ -92,16 +92,21 @@ if (filter_has_var(INPUT_POST, 'submit')) {
         )
         VALUES
         (
-            '$rider_lastname',
-			'$rider_firstname',
-			'$contactnumber',
-			'$email',
-            '$active'
+            :rider_lastname,
+			:rider_firstname,
+			:contactnumber,
+			:email,
+            :active
 	    )";
 
-    $res = mysqli_query($conn, $sql);
+    $insertriderStatement = $pdo->prepare($insertriderQuery);
+    $insertriderStatement->bindParam(':rider_lastname', $rider_lastname);
+    $insertriderStatement->bindParam(':rider_firstname', $rider_firstname);
+    $insertriderStatement->bindParam(':contactnumber', $contactnumber);
+    $insertriderStatement->bindParam(':email', $email);
+    $insertriderStatement->bindParam(':active', $active);
 
-    if ($res) {
+    if ($insertriderStatement->execute()) {
         //To show display messege once data has been inserted
         $_SESSION['add'] = "
             <div class='alert alert--success' id='alert'>

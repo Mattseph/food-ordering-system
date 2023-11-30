@@ -46,42 +46,41 @@
 
             <?php
             //Selecting all from table admin.
-            $sql = "SELECT * from delivery_rider ORDER BY rider_id DESC";
+            $riderQuery = "SELECT * from delivery_rider ORDER BY rider_id DESC";
             //Executiong the query
-            $res = mysqli_query($conn, $sql);
+            $riderStatement = $pdo->query($riderQuery);
+            $riders = $riderStatement->fetchAll(PDO::FETCH_ASSOC);
 
-            if ($res) {    //Count rows
-                $count = mysqli_num_rows($res);
+            if ($riders) {    //Count rows
+
                 //Creating a variable and assign the value.
                 $id = 1;
+                //Using foreach loop to get all of the data from database.
+                //It will run as long as there are data in database.
+                foreach ($riders as $rider) {
+                    $rider_id = $rider['rider_id'];
+                    $rider_lastname = $rider['rider_lastname'];
+                    $rider_firstname = $rider['rider_firstname'];
+                    $contact_number = $rider['contact_number'];
+                    $email = $rider['email'];
+                    $active = $rider['active'];
 
-                if ($count > 0) {    //Using while loop to get all of the data from database.
-                    //It will run as long as there are data in database.
-                    while ($row = mysqli_fetch_assoc($res)) {
-                        $rider_id = $row['rider_id'];
-                        $rider_lastname = $row['rider_lastname'];
-                        $rider_firstname = $row['rider_firstname'];
-                        $contact_number = $row['contact_number'];
-                        $email = $row['email'];
-                        $active = $row['active'];
-
-                        //Display the values in the table
+                    //Display the values in the table
             ?>
-                        <tr>
-                            <td><?php echo $id++; ?></td>
-                            <td><?php echo $rider_lastname; ?></td>
-                            <td><?php echo $rider_firstname; ?></td>
-                            <td><?php echo $contact_number; ?></td>
-                            <td><?php echo $email; ?></td>
-                            <td><?php echo $active; ?></td>
+                    <tr>
+                        <td><?php echo $id++; ?></td>
+                        <td><?php echo $rider_lastname; ?></td>
+                        <td><?php echo $rider_firstname; ?></td>
+                        <td><?php echo $contact_number; ?></td>
+                        <td><?php echo $email; ?></td>
+                        <td><?php echo $active; ?></td>
 
-                            <td>
-                                <a href="<?php echo SITEURL; ?>admin/delivery_rider_manage/update_delivery.php?rider_id=<?php echo $rider_id; ?>" class="btn btn-second">Update</a>
-                                <a href="<?php echo SITEURL; ?>admin/delivery_rider_manage/delete_delivery.php?rider_id=<?php echo $rider_id; ?>" class="btn btn-third">Delete</a>
-                            </td>
-                        </tr>
+                        <td>
+                            <a href="<?php echo SITEURL; ?>admin/delivery_rider_manage/update_delivery.php?rider_id=<?php echo $rider_id; ?>" class="btn btn-second">Update</a>
+                            <a href="<?php echo SITEURL; ?>admin/delivery_rider_manage/delete_delivery.php?rider_id=<?php echo $rider_id; ?>" class="btn btn-third">Delete</a>
+                        </td>
+                    </tr>
             <?php
-                    }
                 }
             }
             ?>
